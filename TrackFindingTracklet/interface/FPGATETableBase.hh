@@ -1,0 +1,60 @@
+#ifndef FPGATETABLEBASE_H
+#define FPGATETABLEBASE_H
+
+#include <iostream>
+#include <fstream>
+#include <assert.h>
+#include <math.h>
+#include <vector>
+
+
+using namespace std;
+
+class FPGATETableBase{
+
+public:
+
+  FPGATETableBase() {
+   
+  }
+
+  ~FPGATETableBase() {
+
+  }
+
+
+  void writeVMTable(std::string name, bool positive=true) {
+    
+    ofstream out;
+    out.open(name.c_str());
+    for(unsigned int i=0;i<table_.size();i++){
+
+      assert(nbits_>0);
+
+      int itable = table_[i];
+      if (positive) {
+	if (table_[i] < 0) itable = (1<<nbits_)-1; 
+      }
+      
+      FPGAWord tmp;  
+      tmp.set(itable, nbits_,positive,__LINE__,__FILE__);
+      
+      out << tmp.str() << endl;
+    }
+    out.close();
+  }
+
+
+protected:
+
+  vector<int> table_;
+  int nbits_;
+  
+};
+
+
+
+#endif
+
+
+

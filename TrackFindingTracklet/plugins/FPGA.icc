@@ -1,0 +1,485 @@
+
+    //cout << "Read event:"<<ev.eventnum()<<" Number of stubs="
+    //	 <<ev.nstubs()<<endl;
+    
+    cleanTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->clean();
+    }
+    
+//for (std::map<string,FPGADTC>::iterator it=dtcs.begin();it!=dtcs.end();it++){
+//  	it->second.clean();
+//  }
+    
+    cleanTimer.stop();
+
+    bool hitlayer[6];
+    bool hitdisk[5];
+    int stublayer[6];
+    int stublayer1[6][NSector];
+    int stubdisk1[5][NSector];
+    for (unsigned int ll=0;ll<6;ll++){
+      hitlayer[ll]=false;
+      stublayer[ll]=0;
+      for (unsigned int jj=0;jj<NSector;jj++){
+        stublayer1[ll][jj]=0;
+      }
+    }
+    for (unsigned int ll=0;ll<5;ll++){
+      hitdisk[ll]=false;
+      for (unsigned int jj=0;jj<NSector;jj++){
+        stubdisk1[ll][jj]=0;
+      }
+    }	
+
+
+    int stubcount[6][24*NSector];	
+    for (unsigned int ll=0;ll<24*NSector;ll++){
+      stubcount[0][ll]=0;
+      stubcount[1][ll]=0;
+      stubcount[2][ll]=0;
+      stubcount[3][ll]=0;
+      stubcount[4][ll]=0;
+      stubcount[5][ll]=0;
+    }    
+
+    addStubTimer.start();
+    
+    for (int j=0;j<ev.nstubs();j++){
+
+      L1TStub stub=ev.stub(j);
+      //if (stub.layer()>999) {
+      //	 cout << "Found stub in disk : "<<stub.module()<<" r= "<<stub.r()
+	// <<" z= "<<stub.z()<<endl;
+      //}
+
+      if (debug1) cout << "Stub: layer="<<stub.layer()+1
+                       <<" disk="<<stub.disk()  
+		       <<" phi="<<stub.phi()
+	               <<" r="<<stub.r()
+	               <<" z="<<stub.z()
+	               <<endl;
+
+
+      double phi=stub.phi();
+      if (hourglass) {
+        //phi-=0.5*two_pi/NSector;
+        phi+=0.5*dphisectorHG;
+      }     	 
+      if (phi<0.0) phi+=two_pi;
+      unsigned int isector=NSector*phi/two_pi;
+      assert(isector<NSector);
+
+
+
+      if (stub.layer()<7) {
+
+        //cout << "Stub in layer : "<<stub.layer()+1<<endl;
+
+	hitlayer[stub.layer()]=true;
+
+	stub.lorentzcor(-40.0/10000.0);
+
+        double phi=stub.phi();
+        if (phi<0.0) phi+=two_pi;
+        unsigned int iphi=24*NSector*phi/two_pi;
+        assert(iphi<24*NSector);
+	double max=115.0;
+	if (stub.layer()==0) max=70.0;
+        if (fabs(stub.z())<max) stubcount[stub.layer()][iphi]++;
+	unsigned int isector=iphi/24;
+	assert(isector<NSector);
+	stublayer1[stub.layer()][isector]++;
+        stublayer[stub.layer()]++;
+
+      } else {
+	stubdisk1[abs(stub.disk())-1][isector]++;
+        hitdisk[abs(stub.disk())-1]=true;
+      }
+
+
+
+      //cout << "stub layer : "<<stub.layer()<<endl;
+
+      int layer=stub.layer()+1;
+      int ladder=stub.ladder(); 
+      int module=stub.module();
+	
+      //HACK for mistake in ASCII files
+      if (layer==3&&module==40) module=39;
+      if (layer==1&&module>31) module=31;
+	
+	//cout << "Done add stub"<<endl;	
+
+      string dtc=cabling.dtc(layer,ladder,module);
+      string dtcbase=dtc.substr(2,dtc.size()-2);
+      if (dtc[0]=='n') {
+         dtcbase=dtc.substr(0,4)+dtc.substr(6,dtc.size()-6);
+      }     
+
+      //cout << "Found dtc for : "<<layer<<" "<<ladder<<" "<<module<<" "<<dtc<<endl;
+
+      
+      cabling.addphi(dtc,stub.phi(),layer, module);
+
+
+
+      for (unsigned int k=0;k<NSector;k++) {
+        int diff=k-isector;
+	int nSector=NSector;
+        if (diff>nSector/2) diff-=NSector;
+        if (diff<-nSector/2) diff+=NSector;
+	if (abs(diff)>1) continue;
+	if (hourglass){
+	  double phiminsect=k*two_pi/NSector-0.5*(dphisectorHG-two_pi/NSector)-0.5*two_pi/NSector;
+	  double dphi=stub.phi()-phiminsect;
+	  if (dphi>0.5*two_pi) dphi-=two_pi;
+	  while (dphi<0.0) dphi+=two_pi;
+	  if (dphi>dphisectorHG) continue;
+	  //cout << "stub.phi phiminsect : "<<stub.phi()<<" "<<phiminsect<<" "<<dphi<<endl;
+	}
+	//cout << "Will try to add stub to sector : "<<k<<endl;
+        sectors[k]->addStub(stub,dtcbase);	  
+      }
+
+
+
+
+      
+
+    }
+
+    for(int ii=0;ii<6;ii++){
+     if (hitlayer[ii]) nlayershit++;
+     if (ii<5) {
+       if (hitdisk[ii]) nlayershit++;
+     }
+    }   
+
+//if (writeDTCLinks) {
+//  //cout << "Will write DTC links"<<endl;
+//  static ofstream out("dtclinks.txt");
+//  for (std::map<string,FPGADTC>::iterator iter=dtcs.begin();iter!=dtcs.end();iter++) {
+//    for (unsigned int j=0;j<iter->second.nLinks();j++) {
+//      out << iter->first << " " << j << " " << iter->second.link(j).nStubs() << endl;    
+//    }	 
+//  }
+//  //cout << "Done write DTC links"<<endl;
+// }
+
+if (writestubs) {
+  for (unsigned int k=0;k<NSector;k++) {
+    if(k==writememsect)
+      sectors[k]->writeInputStubs(first);
+  }
+ }
+
+if (writestubs_in2) {
+  for (unsigned int k=0;k<NSector;k++) {
+    if(k==writememsect)
+      sectors[k]->writeInputStubs_in2(first);
+  }
+ }
+
+if (writeHitEff) {
+        static ofstream outhit("hiteff.txt");
+    	outhit << simtrk.eta()<<" "<<hitlayer[0] << " " << hitlayer[1] << " "
+                  << hitlayer[2] << " " << hitlayer[3] << " "	  
+		  << hitlayer[4] << " " << hitlayer[5] << endl;
+    }
+
+    if (writeStubsLayer) {
+      static ofstream out("stubslayer.txt");
+      out <<stublayer[0]<<" "<<stublayer[1]<<" "<<stublayer[2]<<" "
+          <<stublayer[3]<<" "<<stublayer[4]<<" "<<stublayer[5]<<endl;
+    }     
+
+
+    if (writeStubsLayerperSector) {
+      static ofstream out("stubslayerpersector.txt");
+      for(unsigned int jj=0;jj<NSector;jj++){
+        out <<stublayer1[0][jj]<<" "<<stublayer1[1][jj]<<" "
+	    <<stublayer1[2][jj]<<" "
+            <<stublayer1[3][jj]<<" "<<stublayer1[4][jj]<<" "
+            <<stublayer1[5][jj]<<endl; 
+      }
+      static ofstream out1("stubsdiskpersector.txt");
+      for(unsigned int jj=0;jj<NSector;jj++){
+        out1 <<stubdisk1[0][jj]<<" "<<stubdisk1[1][jj]<<" "
+	    <<stubdisk1[2][jj]<<" "
+            <<stubdisk1[3][jj]<<" "<<stubdisk1[4][jj]<<endl; 
+      }
+    }     
+
+
+    
+    if (0) {
+      static ofstream out("newvmoccupancy.txt");
+      for (unsigned int ll=0;ll<24*NSector;ll++){
+        out<<1<<" "<<stubcount[0][ll]<<endl;
+        out<<2<<" "<<stubcount[1][ll]<<endl;
+        out<<3<<" "<<stubcount[2][ll]<<endl;
+        out<<4<<" "<<stubcount[3][ll]<<endl;
+        out<<5<<" "<<stubcount[4][ll]<<endl;
+        out<<6<<" "<<stubcount[5][ll]<<endl;
+      }
+    } 
+
+
+
+    addStubTimer.stop();
+
+
+    //Now start processing
+
+    VMRouterTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeVMR();	 
+      if(writemem&&k==writememsect) {
+        sectors[k]->writeVMSTE(first);	 
+        sectors[k]->writeVMSME(first);	 
+        sectors[k]->writeAS(first);	 
+      }      
+    }
+    VMRouterTimer.stop();
+
+    TETimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeTE();	
+      if(writemem&&k==writememsect){
+        sectors[k]->writeSP(first);
+      } 
+    }
+    TETimer.stop();
+
+
+    TCTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeTC();	 
+      if(writemem&&k==writememsect){
+        sectors[k]->writeTPAR(first);
+        sectors[k]->writeTPROJ(first);
+      } 
+    }
+    TCTimer.stop();
+
+
+
+
+    PTTimer.start();
+    //Here we do the projections to the nearest neigbors  
+    for (unsigned int k=0;k<NSector;k++) {
+      unsigned int  plus=k+1;
+      if (plus>=NSector) plus=0;
+      int minus=k-1;
+      if (minus<0) minus=NSector-1;
+      sectors[k]->executePT(sectors[plus],sectors[minus]);	 
+    }
+    PTTimer.stop();
+
+
+
+    PRTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executePR();	
+      if(writemem&&k==writememsect){
+        sectors[k]->writeVMPROJ(first);
+        sectors[k]->writeAP(first);
+      }
+    }
+    PRTimer.stop();
+
+    
+    METimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeME();	
+      if(writemem&&k==writememsect){
+        sectors[k]->writeCM(first);
+      } 
+    }
+    METimer.stop();
+
+
+    MCTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeMC();
+      if(writemem&&k==writememsect){
+        sectors[k]->writeMC(first);
+      }
+    }
+    MCTimer.stop();
+
+
+    MPTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeMP();
+      if(writemem&&k==writememsect){
+        sectors[k]->writeMC(first);
+      }
+    }
+    MPTimer.stop();
+
+
+
+    MTTimer.start();
+    //Here we return the matches
+    for (unsigned int k=0;k<NSector;k++) {
+      unsigned int  plus=k+1;
+      if (plus>=NSector) plus=0;
+      int minus=k-1;
+      if (minus<0) minus=NSector-1;
+      sectors[k]->executeMT(sectors[plus],sectors[minus]);	 
+    }
+    MTTimer.stop();
+
+
+    FTTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executeFT();	 
+      if((writemem||writeifit)&&k==writememsect){
+         sectors[k]->writeTF(first);
+      }
+    }
+    FTTimer.stop();
+
+    PDTimer.start();
+    for (unsigned int k=0;k<NSector;k++) {
+      sectors[k]->executePD(tracks);	  
+      if(((writemem||writeifit)&&k==writememsect) || writeAllCT){
+         sectors[k]->writeCT(first);
+      }
+    }
+    PDTimer.stop();
+
+    bool match=false;
+    for (unsigned int k=0;k<NSector;k++) {
+      //cout << "FPGA.icc " << k << " " << tracks.size() << endl;
+      //sectors[k]->findduplicates(tracks);
+      if (selectmu==1) {
+	if (ev.nsimtracks()>0) {
+	  match=match||sectors[k]->foundTrack(outres,simtrk);
+	}
+      }
+    }
+    
+
+
+    //Tag adjacent sector duplicates
+    if(AdjacentRemoval) {
+      unsigned int nTrk = tracks.size();
+
+      // Grid removal
+      if(RemovalType=="grid") {
+        bool grid[450][40] = {{false}};
+        for(unsigned int itrk=0; itrk<nTrk; itrk++) {
+          if(nTrk==0) break;
+          if(tracks[itrk]->duplicate()==1) continue;
+
+          // Correct phi domain to 0 < phi < 2*PI
+          double phiCorr;
+          if(tracks[itrk]->phi0() < 0)           phiCorr = tracks[itrk]->phi0()+2*M_PI;
+          else if(tracks[itrk]->phi0() > 2*M_PI) phiCorr = tracks[itrk]->phi0()-2*M_PI;
+          else                                   phiCorr = tracks[itrk]->phi0();
+          double phiBin = phiCorr/(2*M_PI/9/50);
+          if((int)phiBin <0) cout << "GLOBAL BIN TOO SMALL" << endl;
+          if((int)phiBin >449) cout << "GLOBAL BIN TOO LARGE" << endl;
+
+          double ptBin = 1/tracks[itrk]->pt()*40+20;
+          ptBin = std::max(ptBin,0.);
+          ptBin = std::min(ptBin,39.);
+          if((int)ptBin <0) cout << "ADJ PT BIN TOO SMALL" << endl;
+          if((int)ptBin >39) cout << "ADJ PT BIN TOO LARGE" << endl;
+
+          if(grid[(int)phiBin][(int)ptBin]==true) {
+            tracks[itrk]->setDuplicate(true);
+          } else {
+            grid[(int)phiBin][(int)ptBin]=true;
+          }
+
+        }
+      } // end grid removal
+
+      // Removal by comparing pairs of tracks
+      if(RemovalType=="ichi" || RemovalType=="nstub") {
+        for(unsigned int itrk=0; itrk<nTrk-1; itrk++) { // nTrk-1 since last track has no other to compare to
+          if(nTrk==0) break;
+          if(tracks[itrk]->duplicate()==1) continue;
+
+          int nStubP = 0;
+          vector<int> nStubS(nTrk);
+          vector<int> nShare(nTrk);
+
+          // Get and count primary stubs
+          std::map<int, int> stubsTrk1 = tracks[itrk]->stubID();
+          nStubP = stubsTrk1.size();
+
+          // Count number of stubs in common for all pairs
+          for(unsigned int jtrk=itrk+1; jtrk<nTrk; jtrk++) {
+            // Skip duplicate tracks
+            if(tracks[jtrk]->duplicate()==1) continue;
+
+            // Skip tracks not in an adjacent sector
+            if(abs(tracks[jtrk]->sector()-tracks[itrk]->sector())!=1 && abs(tracks[jtrk]->sector()-tracks[itrk]->sector())!=(int)NSector-1) continue; 
+
+            // Get and count secondary stubs
+            std::map<int, int> stubsTrk2 = tracks[jtrk]->stubID();
+            nStubS[jtrk] = stubsTrk2.size();
+
+            // Count shared stubs:
+            for(std::map<int, int>::iterator  st=stubsTrk1.begin(); st!=stubsTrk1.end(); st++) {
+              // Find stubs in same layer
+              if(stubsTrk2.find(st->first) != stubsTrk2.end()) {
+                // Find tracks from adjacent sectors
+                if((tracks[itrk]->sector() > tracks[jtrk]->sector()) || (tracks[jtrk]->sector()-tracks[itrk]->sector()==(int)NSector-1)) {
+                  // Compare stub ids, taking into account sector bits
+                  if((st->second+(1<<9))==stubsTrk2[st->first]) nShare[jtrk]++;
+                } else if((tracks[itrk]->sector() < tracks[jtrk]->sector()) || (tracks[itrk]->sector()-tracks[jtrk]->sector()==(int)NSector-1)) {
+                  // Compare stub ids, taking into account sector bits
+                  if((st->second-(1<<9))==stubsTrk2[st->first]) nShare[jtrk]++;
+                }
+              }
+            }
+          } // end counting stubs in common
+
+          // Tag duplicates
+          for(unsigned int jtrk=itrk+1; jtrk<nTrk; jtrk++) {
+            // Skip duplicate tracks
+            if(tracks[jtrk]->duplicate()==1) continue;
+
+            if((nStubP-nShare[jtrk] < minIndStubs) || (nStubS[jtrk]-nShare[jtrk] < minIndStubs)) {
+
+              // Only remove from adjacent sectors
+              if(abs(tracks[jtrk]->sector()-tracks[itrk]->sector())==1 || abs(tracks[jtrk]->sector()-tracks[itrk]->sector())==(int)NSector-1) { 
+
+                // Chi2 duplicate removal
+                if(RemovalType=="ichi") {
+                  if((int)tracks[itrk]->ichisq() > (int)tracks[jtrk]->ichisq()) {
+                    tracks[itrk]->setDuplicate(true);
+                  }
+                  else if((int)tracks[itrk]->ichisq() <= (int)tracks[jtrk]->ichisq()) {
+                    tracks[jtrk]->setDuplicate(true);
+                  }
+                  else cout << "Error: Didn't tag either track in duplicate pair." << endl;
+                }
+
+                // nStub duplicate removal
+                if(RemovalType=="nstub") {
+                  if((nStubP-nShare[jtrk] < minIndStubs) && (nStubP <  nStubS[jtrk])) {
+                    tracks[itrk]->setDuplicate(true);
+                  }
+                  else if((nStubS[jtrk]-nShare[jtrk] < minIndStubs) && (nStubS[jtrk] <= nStubP)) {
+                    tracks[jtrk]->setDuplicate(true);
+                  }
+                  else cout << "Error: Didn't tag either track in duplicate pair." << endl;
+                }
+
+              }
+            }
+          } // end tag duplicates 
+        }
+      } // end removal by comparing pairs of tracks
+
+    } // Adjacent Removal
+
+
+
