@@ -13,6 +13,8 @@ public:
     iSector_=iSector;
   }
 
+  virtual ~FPGAProcessBase() { } 
+
   virtual void addOutput(FPGAMemoryBase* memory,string output)=0;
 
   virtual void addInput(FPGAMemoryBase* memory,string input)=0;
