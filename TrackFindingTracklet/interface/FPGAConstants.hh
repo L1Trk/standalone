@@ -4,6 +4,12 @@
 //Uncomment if you want root output
 //#define USEROOT
 
+//Uncomment if you want do not want to run the hybrid algorithm
+#define USEHYBRID
+
+static bool doKF=true; //true if using KF (and USEHYBRID uncommented)
+static bool printDebugKF=false; // if true print lots of debugging statements related to the KF fit
+
 static bool hourglass=true;
 
 //Gemetry extensions
@@ -92,6 +98,7 @@ static bool writemem=false; //Note that for 'full' detector this will open
 static unsigned int writememsect=3;  //writemem only for this sector
 
 static bool warnNoMem=false;  //If true will print out warnings about missing projection memories
+
 
 //Program flow (should be true for normal operation)
 //enables the stub finding in these layer/disk combinations
@@ -264,17 +271,17 @@ static const double routerPSdisk=65.0;
 
 static unsigned int MAXOFFSET=10000; //set to 0 for regular truncation
 
-static unsigned int MAXSTUBSLINK = (hourglass?162:54) + MAXOFFSET; //Max stubs per link
-static unsigned int MAXLAYERROUTER = (hourglass?162:54) + MAXOFFSET; //Max stubs handled by layer router
-static unsigned int MAXDISKROUTER = (hourglass?162:54) + MAXOFFSET; //Max stubs handled by disk router
-static unsigned int MAXVMROUTER = (hourglass?162:54) + MAXOFFSET; //Max stubs handled by VM router
-static unsigned int MAXTE = (hourglass?162:54) + MAXOFFSET; //Maximum number of stub pairs to try in TE 
-static unsigned int MAXTC = (hourglass?162:54) + MAXOFFSET; //Maximum number of tracklet parameter calculations
+static unsigned int MAXSTUBSLINK = (hourglass?108:54) + MAXOFFSET; //Max stubs per link
+static unsigned int MAXLAYERROUTER = (hourglass?108:54) + MAXOFFSET; //Max stubs handled by layer router
+static unsigned int MAXDISKROUTER = (hourglass?108:54) + MAXOFFSET; //Max stubs handled by disk router
+static unsigned int MAXVMROUTER = (hourglass?108:54) + MAXOFFSET; //Max stubs handled by VM router
+static unsigned int MAXTE = (hourglass?108:54) + MAXOFFSET; //Maximum number of stub pairs to try in TE 
+static unsigned int MAXTC = (hourglass?108:54) + MAXOFFSET; //Maximum number of tracklet parameter calculations
 //static unsigned int MAXPROJECTIONTRANSCEIVER = 10000; //Maximum number of projections to neighbor
-static unsigned int MAXPROJROUTER = (hourglass?162:54) + MAXOFFSET; //Maximum number of projections to route
-static unsigned int MAXME = (hourglass?162:54) + MAXOFFSET; //Maximum number of stub-projection matches to try
-static unsigned int MAXMC = (hourglass?162:54) + MAXOFFSET; //Maximum number of match calculations
-static unsigned int MAXFIT = (hourglass?162:54) + MAXOFFSET; //Maximum number of track fits
+static unsigned int MAXPROJROUTER = (hourglass?108:54) + MAXOFFSET; //Maximum number of projections to route
+static unsigned int MAXME = (hourglass?108:54) + MAXOFFSET; //Maximum number of stub-projection matches to try
+static unsigned int MAXMC = (hourglass?108:54) + MAXOFFSET; //Maximum number of match calculations
+static unsigned int MAXFIT = (hourglass?108:54) + MAXOFFSET; //Maximum number of track fits
 
 
 static double dphisector=two_pi/NSector;

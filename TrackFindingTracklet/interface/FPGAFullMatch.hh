@@ -49,16 +49,20 @@ public:
   }
 
   void addMatch(FPGATracklet* tracklet,std::pair<FPGAStub*,L1TStub*> stub) {
-    for(unsigned int i=0;i<matches_.size();i++){
-      if (matches_[i].first==tracklet){ //Better match, replace
-	matches_[i].second=stub;
-	return;
+
+    if (!doKF) { //When using KF we allow multiple matches
+      for(unsigned int i=0;i<matches_.size();i++){
+	if (matches_[i].first==tracklet){ //Better match, replace
+	  matches_[i].second=stub;
+	  return;
+	}
       }
     }
     std::pair<FPGATracklet*,std::pair<FPGAStub*,L1TStub*> > tmp(tracklet,stub);
     //Check that we have the right TCID order
     if (matches_.size()>0) {
-      if (matches_[matches_.size()-1].first->TCID()>=tracklet->TCID()){
+      if ( (!doKF && matches_[matches_.size()-1].first->TCID()>=tracklet->TCID()) || 
+	   (doKF && matches_[matches_.size()-1].first->TCID()>tracklet->TCID()) ) {
 	cout << "Wrong TCID ordering in "<<getName()<<" : "
 	     <<matches_[matches_.size()-1].first->TCID()
 	     <<" "<<tracklet->TCID()

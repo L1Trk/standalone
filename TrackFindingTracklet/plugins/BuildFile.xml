@@ -9,5 +9,6 @@
   <use   name="DataFormats/L1TrackTrigger"/>
   <use   name="hepmc"/>
   <use   name="root"/>
+  <use   name="L1Trigger/TrackFindingTMTT"/>
   <flags   EDM_PLUGIN="1"/>
 </library>

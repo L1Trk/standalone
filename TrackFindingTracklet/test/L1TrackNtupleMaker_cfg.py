@@ -54,9 +54,16 @@ elif GEOMETRY == "TkOnly":
     Source_Files = cms.untracked.vstring(
     "file:/afs/cern.ch/work/s/skinnari/public/L1TK_90X/MuMinus_1to10_TkOnly.root"
     )
-process.source = cms.Source("PoolSource", fileNames = Source_Files)
+process.source = cms.Source("PoolSource", 
+                            fileNames = Source_Files,
+                            inputCommands = cms.untracked.vstring(
+                              'keep *_*_*_*',
+                              'drop l1tEMTFHit2016*_*_*_*',
+                              'drop l1tEMTFTrack2016*_*_*_*'
+                              )
+                            )
 
-process.TFileService = cms.Service("TFileService", fileName = cms.string('TTbar_PU200_WithoutTruncation.root'), closeFileFast = cms.untracked.bool(True))
+process.TFileService = cms.Service("TFileService", fileName = cms.string('TTbar_PU200_hybrid.root'), closeFileFast = cms.untracked.bool(True))
 
 
 
