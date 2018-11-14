@@ -178,7 +178,7 @@ class var_base {
     }
 #endif
   }
-  ~var_base(){
+  virtual ~var_base(){
 #ifdef IMATH_ROOT
     if(h_file_) {
       h_file_->ls();
@@ -955,7 +955,8 @@ class var_inv : public var_base {
     }
   }
   ~var_inv(){
-    if(LUT) delete LUT;
+    //if(LUT) delete LUT;
+    delete[] LUT;
   }
 
   void set_mode(mode m){ m_ = m;}
