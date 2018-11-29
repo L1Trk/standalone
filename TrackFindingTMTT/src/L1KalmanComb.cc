@@ -414,7 +414,7 @@ L1fittedTrack L1KalmanComb::fit(const L1track3D& l1track3D){
     }
 
     // for Tom - fitted track params must lie in same sector as HT originally found track in.
-    if (!returnTrk.consistentSector()) {
+    if (!returnTrk.consistentSector() && getSettings()->hybrid()) {
 
       L1fittedTrack failedTrk(getSettings(), l1track3D, cand->stubs(), trackParams["qOverPt"], trackParams["d0"], trackParams["phi0"], trackParams["z0"], trackParams["t"], cand->chi2(), nPar_, false);
       failedTrk.setInfoKF( cand->nSkippedLayers(), numUpdateCalls_ );

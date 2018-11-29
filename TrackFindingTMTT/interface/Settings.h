@@ -35,7 +35,7 @@ namespace TMTT {
     kalmanRemove2PScut_=true;
     killScenario_=0;
     kalmanMaxSkipLayers_=6;
-    kalmanDebugLevel_=0;
+    kalmanDebugLevel_=1;
     enableDigitize_=false;
     houghMinPt_=2.0;
     chosenRofPhi_=55.0;
