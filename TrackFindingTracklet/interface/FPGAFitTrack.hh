@@ -12,6 +12,7 @@
 #ifdef USEHYBRID
 #include "L1Trigger/TrackFindingTMTT/interface/L1track3D.h"
 #include "L1Trigger/TrackFindingTMTT/interface/KF4ParamsComb.h"
+
 #endif
 
 using namespace std;
@@ -190,7 +191,7 @@ public:
       
       
       if (printDebugKF) cout << "Will create stub with : "<<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-      TMTT::Stub* stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule, barrel, iphi, alpha);
+      TMTT::Stub* stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule, barrel, iphi, alpha, 0, 0);
       stubs.push_back(stubptr);
       
       kfphi=tracklet->outerStub()->phi();
@@ -210,7 +211,7 @@ public:
       
       
       if (printDebugKF) cout << "Will create stub with : "<<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-      stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule ,barrel, iphi, alpha);
+      stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule ,barrel, iphi, alpha, 0, 0);
       stubs.push_back(stubptr);
       
       //
@@ -281,9 +282,21 @@ public:
 	  if (printDebugKF) cout << "Will create disk stub with : ";
 	  
 	}
+
+ /* edm::ESHandle<TrackerGeometry> trackerGeometryHandle;
+  iSetup.get<TrackerDigiGeometryRecord>().get( trackerGeometryHandle );
+
+  const TrackerGeometry*  trackerGeometry = trackerGeometryHandle.product();
+
+  edm::ESHandle<TrackerTopology> trackerTopologyHandle;
+  iSetup.get<TrackerTopologyRcd>().get(trackerTopologyHandle);
+
+  const TrackerTopology*  trackerTopology = trackerTopologyHandle.product();
+*/
+
 	
 	if (printDebugKF) cout <<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-	stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer,psmodule,barrel, iphi, alpha);
+	stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer,psmodule,barrel, iphi, alpha, 0, 0);
 	stubs.push_back(stubptr);
       }
       
@@ -356,7 +369,7 @@ public:
       //  cout << "Will call fit" << endl;
       
       //KFitter.fit(l1track3d,1,kf_eta_reg);
-      TMTT::KFTrackletTrack trk=KFitter.fit(l1track3d);
+      TMTT::KFTrackletTrack trk=KFitter.fit(l1track3d).returnKFTrackletTrack();
       
       if (printDebugKF) cout << "Done with Kalman fit. Pars: pt = " << trk.pt() << ", 1/2R = " << 3.8*3*trk.qOverPt()/2000 << ", phi0 = " << trk.phi0() << ", eta = " << trk.eta() << ", z0 = " << trk.z0() << endl;
       

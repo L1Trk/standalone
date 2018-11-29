@@ -10,7 +10,7 @@
 
 #include "L1Trigger/TrackFindingTMTT/interface/L1fittedTrack.h"
 #include "L1Trigger/TrackFindingTMTT/interface/L1track3D.h"
-
+#include "L1Trigger/TrackFindingTMTT/interface/KFTrackletTrack.h"
 #include <vector>
 #include <utility>
 

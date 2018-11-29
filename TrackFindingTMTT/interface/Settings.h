@@ -17,7 +17,44 @@ class Settings {
 public:
   Settings(const edm::ParameterSet& iConfig);
   ~Settings(){}
+   Settings() {
+    reduceLayerID_=true;
+    useLayerID_=true;
+    minFracMatchStubsOnReco_=-99;
+    minFracMatchStubsOnTP_=-99;
+    minNumMatchLayers_=4;
+    minNumMatchPSLayers_=0;
+    stubMatchStrict_=false;
+    minStubLayers_=4;
+    minPtToReduceLayers_=99999.;
+    deadReduceLayers_=false;
+    kalmanMinNumStubs_=4;
+    kalmanMaxNumStubs_=4;
+    numPhiOctants_=9;
+    numPhiSectors_=9;
+    kalmanRemove2PScut_=true;
+    killScenario_=0;
+    kalmanMaxSkipLayers_=6;
+    kalmanDebugLevel_=0;
+    enableDigitize_=false;
+    houghMinPt_=2.0;
+    chosenRofPhi_=55.0;
+    houghNbinsPt_=18;
+    handleStripsPhiSec_=1;
+    useApproxB_=true;
+    kalmanHOtilted_=true; 
+    kalmanHOhelixExp_=true;
+    kalmanHOalpha_=1;
+    kalmanHOdodgy_=false;
+    kalmanHOprojZcorr_=1;
+    bApprox_gradient_=0.886454;
+    bApprox_intercept_=0.504148;
+    handleStripsEtaSec_=false;
+    kalmanFillInternalHists_=false;
+    kalmanMultiScattTerm_=0.00075;
+    kalmanMultiScattFactor_=0.0;
 
+   }
   //=== General settings.
 
   // Enable all use of MC truth info (disable to save CPU).
