@@ -144,6 +144,14 @@ TMatrixD KF4ParamsComb::seedP(const L1track3D& l1track3D)const{
   TMatrixD p(nPar_,nPar_);
 
   double c = getSettings()->invPtToInvR() / 2; 
+if(getSettings()->hybrid()){
+
+    p(INV2R,INV2R) = 100000*0.0157 * 0.0157 * c * c * 10; 
+    p(PHI0,PHI0) = 0.0051 * 0.0051 * 4; 
+    p(Z0,Z0) = 5.0 * 5.0; 
+    p(T,T) = 0.25 * 0.25 * 4;
+
+}else{
 
   if ( getSettings()->numEtaRegions() == 18 ) { 
       
@@ -162,6 +170,7 @@ TMatrixD KF4ParamsComb::seedP(const L1track3D& l1track3D)const{
     p(T,T) = 0.25 * 0.25 * 10;
       
   }
+}
 
   return p;
 }

@@ -4,9 +4,9 @@
 
 namespace TMTT {
 
-///=== Get configuration parameters
+ ///=== Get configuration parameters
 
-Settings::Settings(const edm::ParameterSet& iConfig) :
+ Settings::Settings(const edm::ParameterSet& iConfig) :
 
   // See either Analyze_Defaults_cfi.py or Settings.h for description of these parameters.
 
@@ -91,7 +91,7 @@ Settings::Settings(const edm::ParameterSet& iConfig) :
   beamWindowZ_            ( etaSectors_.getParameter<double>                  ( "BeamWindowZ"            ) ),   
   handleStripsEtaSec_     ( etaSectors_.getParameter<bool>                    ( "HandleStripsEtaSec"     ) ),
   allowOver2EtaSecs_      ( etaSectors_.getParameter<bool>                    ( "AllowOver2EtaSecs"      ) ),
-                               
+
   //=== r-phi Hough transform array specifications.
   houghMinPt_             ( htArraySpecRphi_.getParameter<double>             ( "HoughMinPt"             ) ),
   houghNbinsPt_           ( htArraySpecRphi_.getParameter<unsigned int>       ( "HoughNbinsPt"           ) ),
@@ -107,7 +107,7 @@ Settings::Settings(const edm::ParameterSet& iConfig) :
   miniHoughMinPt_         ( htArraySpecRphi_.getParameter<double>             ( "MiniHoughMinPt"         ) ),
   miniHoughDontKill_      ( htArraySpecRphi_.getParameter<bool>               ( "MiniHoughDontKill"      ) ),
   miniHoughDontKillMinPt_ ( htArraySpecRphi_.getParameter<double>             ( "MiniHoughDontKillMinPt" ) ),
-                                
+
   //=== Rules governing how stubs are filled into the r-phi Hough Transform array.
   handleStripsRphiHT_     ( htFillingRphi_.getParameter<bool>                 ( "HandleStripsRphiHT"     ) ),
   killSomeHTCellsRphi_    ( htFillingRphi_.getParameter<unsigned int>         ( "KillSomeHTCellsRphi"    ) ),
@@ -209,7 +209,7 @@ Settings::Settings(const edm::ParameterSet& iConfig) :
   kalmanHOalpha_           ( trackFitSettings_.getParameter<unsigned int>     ( "KalmanHOalpha"          ) ),
   kalmanHOprojZcorr_       ( trackFitSettings_.getParameter<unsigned int>     ( "KalmanHOprojZcorr"      ) ),
   kalmanHOdodgy_           ( trackFitSettings_.getParameter<bool>             ( "KalmanHOdodgy"          ) ),
- 
+
   //=== Treatment of dead modules.
 
   deadReduceLayers_       (deadModuleOpts_.getParameter<bool>                 ( "DeadReduceLayers"       ) ),
@@ -261,104 +261,106 @@ Settings::Settings(const edm::ParameterSet& iConfig) :
   writeOutEdmFile_        ( iConfig.getUntrackedParameter<bool>               ( "WriteOutEdmFile", true) ),
 
   // Bfield in Tesla. (Unknown at job initiation. Set to true value for each event
-  bField_                 (0.)
+  bField_                 (0.),
 
-{
-  // If user didn't specify any PDG codes, use e,mu,pi,K,p, to avoid picking up unstable particles like Xi-.
-  vector<unsigned int> genPdgIdsUnsigned( genCuts_.getParameter<vector<unsigned int> >   ( "GenPdgIds" ) ); 
-  if (genPdgIdsUnsigned.empty()) {
-    genPdgIdsUnsigned = {11, 13, 211, 321, 2212};  
-  }
-   
-  // For simplicity, user need not distinguish particles from antiparticles in configuration file.
-  // But here we must store both explicitely in Settings, since TrackingParticleSelector expects them.
-  for (unsigned int i = 0; i < genPdgIdsUnsigned.size(); i++) {
-    genPdgIds_.push_back(  genPdgIdsUnsigned[i] );
-    genPdgIds_.push_back( -genPdgIdsUnsigned[i] );
-  }
+   //hybrid  
+   hybrid_               ( iConfig.getParameter<bool>                ( "hybrid"               ) )
+   {
+    // If user didn't specify any PDG codes, use e,mu,pi,K,p, to avoid picking up unstable particles like Xi-.
+    vector<unsigned int> genPdgIdsUnsigned( genCuts_.getParameter<vector<unsigned int> >   ( "GenPdgIds" ) ); 
+    if (genPdgIdsUnsigned.empty()) {
+     genPdgIdsUnsigned = {11, 13, 211, 321, 2212};  
+    }
 
-  // Clean up list of fitters that require the r-z track filter to be run before them, 
-  // by removing those fitters that are not to be run.
-  vector<string> useRZfilterTmp;
-  for (const string& name : useRZfilter_) {
-    if (std::count(trackFitters_.begin(), trackFitters_.end(), name) > 0) useRZfilterTmp.push_back(name);
-  }
-  useRZfilter_ = useRZfilterTmp;
+    // For simplicity, user need not distinguish particles from antiparticles in configuration file.
+    // But here we must store both explicitely in Settings, since TrackingParticleSelector expects them.
+    for (unsigned int i = 0; i < genPdgIdsUnsigned.size(); i++) {
+     genPdgIds_.push_back(  genPdgIdsUnsigned[i] );
+     genPdgIds_.push_back( -genPdgIdsUnsigned[i] );
+    }
 
-  //--- Sanity checks
+    // Clean up list of fitters that require the r-z track filter to be run before them, 
+    // by removing those fitters that are not to be run.
+    vector<string> useRZfilterTmp;
+    for (const string& name : useRZfilter_) {
+     if (std::count(trackFitters_.begin(), trackFitters_.end(), name) > 0) useRZfilterTmp.push_back(name);
+    }
+    useRZfilter_ = useRZfilterTmp;
 
-  if ( ! (useStubPhi_ || useStubPhiTrk_) ) throw cms::Exception("Settings.cc: Invalid cfg parameters - You cant set both UseStubPhi & useStubPhiTrk to false.");
+    //--- Sanity checks
 
-  if (minNumMatchLayers_ > minStubLayers_)    throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type A.");
-  if (genMinStubLayers_  > minStubLayers_)    throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type B.");
-  if (minNumMatchLayers_ > genMinStubLayers_) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type C.");
+    if ( ! (useStubPhi_ || useStubPhiTrk_) ) throw cms::Exception("Settings.cc: Invalid cfg parameters - You cant set both UseStubPhi & useStubPhiTrk to false.");
 
-  // If reducing number of required layers for high Pt tracks, then above checks must be redone.
-  bool doReduceLayers = (minPtToReduceLayers_ < 10000. || etaSecsReduceLayers_.size() > 0) ;
-  if (doReduceLayers && minStubLayers_ > 4) {
-    if (minNumMatchLayers_ > minStubLayers_ - 1) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type D.");
-    if (genMinStubLayers_  > minStubLayers_ - 1) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type E.");
-  }
+    if (minNumMatchLayers_ > minStubLayers_)    throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type A.");
+    if (genMinStubLayers_  > minStubLayers_)    throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type B.");
+    if (minNumMatchLayers_ > genMinStubLayers_) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type C.");
 
-  for (const unsigned int& iEtaReg : etaSecsReduceLayers_) {
-    if (iEtaReg >= etaRegions_.size()) throw cms::Exception("Settings.cc: You specified an eta sector number in EtaSecsReduceLayers which exceeds the total number of eta sectors!")<<iEtaReg<<" "<<etaRegions_.size()<<endl;
-  }
+    // If reducing number of required layers for high Pt tracks, then above checks must be redone.
+    bool doReduceLayers = (minPtToReduceLayers_ < 10000. || etaSecsReduceLayers_.size() > 0) ;
+    if (doReduceLayers && minStubLayers_ > 4) {
+     if (minNumMatchLayers_ > minStubLayers_ - 1) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type D.");
+     if (genMinStubLayers_  > minStubLayers_ - 1) throw cms::Exception("Settings.cc: Invalid cfg parameters - You are setting the minimum number of layers incorrectly : type E.");
+    }
 
-  // Duplicate track removal algorithm 50 must not be run in parallel with any other.
-  if (dupTrkAlgFit_ == 50) {
-    if (dupTrkAlgRphi_ != 0 || dupTrkAlg3D_ != 0) throw cms::Exception("Settings.c: Invalid cfg parameters -- If using DupTrkAlgFit = 50, you must disable all other duplicate track removal algorithms.");
-  }
+    for (const unsigned int& iEtaReg : etaSecsReduceLayers_) {
+     if (iEtaReg >= etaRegions_.size()) throw cms::Exception("Settings.cc: You specified an eta sector number in EtaSecsReduceLayers which exceeds the total number of eta sectors!")<<iEtaReg<<" "<<etaRegions_.size()<<endl;
+    }
 
-  // Chains of m bin ranges for output of HT.
-  if ( ! busySectorMbinOrder_.empty() ) {
-    // User has specified an order in which the m bins should be chained together. Check if it makes sense.
-    if (busySectorMbinOrder_.size() != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - BusySectorMbinOrder used by HT MUX contains wrong number of elements. Unless you are optimising the MUX, suggest you configure it to an empty vector.");
-    set<unsigned int> mOrderCheck;
-    for (const unsigned int& m : busySectorMbinOrder_) {
+    // Duplicate track removal algorithm 50 must not be run in parallel with any other.
+    if (dupTrkAlgFit_ == 50) {
+     if (dupTrkAlgRphi_ != 0 || dupTrkAlg3D_ != 0) throw cms::Exception("Settings.c: Invalid cfg parameters -- If using DupTrkAlgFit = 50, you must disable all other duplicate track removal algorithms.");
+    }
+
+    // Chains of m bin ranges for output of HT.
+    if ( ! busySectorMbinOrder_.empty() ) {
+     // User has specified an order in which the m bins should be chained together. Check if it makes sense.
+     if (busySectorMbinOrder_.size() != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - BusySectorMbinOrder used by HT MUX contains wrong number of elements. Unless you are optimising the MUX, suggest you configure it to an empty vector.");
+     set<unsigned int> mOrderCheck;
+     for (const unsigned int& m : busySectorMbinOrder_) {
       mOrderCheck.insert(m);
-    }
-    if (mOrderCheck.size() != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - BusySectorMbinOrder used by HT MUX contains duplicate elements.");
-    unsigned int sum_nr = 0;
-    for (unsigned int nr : busySectorMbinRanges_) {
+     }
+     if (mOrderCheck.size() != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - BusySectorMbinOrder used by HT MUX contains duplicate elements.");
+     unsigned int sum_nr = 0;
+     for (unsigned int nr : busySectorMbinRanges_) {
       sum_nr += nr;
+     }
+     if (sum_nr != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - Sum of entries in BusySectorMbinRanges is incorrect.");
     }
-    if (sum_nr != houghNbinsPt_) throw cms::Exception("Settings.cc: Invalid cfg parameters - Sum of entries in BusySectorMbinRanges is incorrect.");
-  }
 
-  if (miniHTstage_) {
-    if (enableMerge2x2_) throw cms::Exception("Settings.cc: it is not allowed to enable both MiniHTstage & EnableMerge2x2 options.");
-    // Options for 2nd stage mini HT
-    if (shape_ != 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - 2nd stage mini HT only allowed for square-shaped cells.");
-    if (miniHoughNbinsPt_ != 2 || miniHoughNbinsPhi_ != 2) throw cms::Exception("Settings.cc: 2nd mini HT has so dar only been implemented in C++ for 2x2.");
-  }
+    if (miniHTstage_) {
+     if (enableMerge2x2_) throw cms::Exception("Settings.cc: it is not allowed to enable both MiniHTstage & EnableMerge2x2 options.");
+     // Options for 2nd stage mini HT
+     if (shape_ != 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - 2nd stage mini HT only allowed for square-shaped cells.");
+     if (miniHoughNbinsPt_ != 2 || miniHoughNbinsPhi_ != 2) throw cms::Exception("Settings.cc: 2nd mini HT has so dar only been implemented in C++ for 2x2.");
+    }
 
-  if (enableMerge2x2_) {
-    if (miniHTstage_) throw cms::Exception("Settings.cc: it is not allowed to enable both MiniHTstage & EnableMerge2x2 options.");
-    // Merging of HT cells has not yet been implemented for diamond or hexagonal HT cell shape.
-    if (enableMerge2x2_ && shape_ != 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - merging only allowed for square-shaped cells.");
-  }
+    if (enableMerge2x2_) {
+     if (miniHTstage_) throw cms::Exception("Settings.cc: it is not allowed to enable both MiniHTstage & EnableMerge2x2 options.");
+     // Merging of HT cells has not yet been implemented for diamond or hexagonal HT cell shape.
+     if (enableMerge2x2_ && shape_ != 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - merging only allowed for square-shaped cells.");
+    }
 
-  // Do not use our private dead module emulation together with the communal Tracklet/TMTT dead module emulation 
-  // developed for the Stress Test.
-  if (deadSimulateFrac_ > 0. && killScenario_ > 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - don't enable both DeadSimulateFrac and KillScenario");
+    // Do not use our private dead module emulation together with the communal Tracklet/TMTT dead module emulation 
+    // developed for the Stress Test.
+    if (deadSimulateFrac_ > 0. && killScenario_ > 0) throw cms::Exception("Settings.cc: Invalid cfg parameters - don't enable both DeadSimulateFrac and KillScenario");
 
-  // Check Kalman fit params.
-  if (kalmanMaxNumStubs_ < kalmanMinNumStubs_) throw cms::Exception("Settings.cc: Invalid cfg parameters - KalmanMaxNumStubs is less than KalmanMaxNumStubs.");
+    // Check Kalman fit params.
+    if (kalmanMaxNumStubs_ < kalmanMinNumStubs_) throw cms::Exception("Settings.cc: Invalid cfg parameters - KalmanMaxNumStubs is less than KalmanMaxNumStubs.");
 
-  if (firmwareType_ != 1) throw cms::Exception("Settings.cc: Invalid cfg parameter - unknown FirmwareType.");
-}
+    if (firmwareType_ != 1) throw cms::Exception("Settings.cc: Invalid cfg parameter - unknown FirmwareType.");
+   }
 
 
-bool Settings::isHTRPhiEtaRegWhitelisted(unsigned const iEtaReg) const
-{
+ bool Settings::isHTRPhiEtaRegWhitelisted(unsigned const iEtaReg) const
+ {
   bool whitelisted = true;
 
   bool const whitelist_enabled = ( ! etaRegWhitelist_.empty() );
   if (whitelist_enabled) {
-    whitelisted = (std::count(etaRegWhitelist_.begin(), etaRegWhitelist_.end(), iEtaReg) > 0);
+   whitelisted = (std::count(etaRegWhitelist_.begin(), etaRegWhitelist_.end(), iEtaReg) > 0);
   }
 
   return whitelisted;
-}
+ }
 
 }
