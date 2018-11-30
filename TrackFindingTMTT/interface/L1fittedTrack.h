@@ -91,7 +91,9 @@ namespace TMTT {
 
    KFTrackletTrack returnKFTrackletTrack(){
 
-    KFTrackletTrack trk_(getL1track3D(), getStubs(), qOverPt(), d0(), phi0(), z0(), tanLambda(), 0, 4, iPhiSec(), iEtaReg(), accepted());
+    std::cout << "qOverPt = " << qOverPt() << std::endl;
+    std::cout << "pt = " << pt() << std::endl;
+    KFTrackletTrack trk_(getL1track3D(), getStubs(), qOverPt(), d0(), phi0(), z0(), tanLambda(), 0, 4, iPhiSec(), iEtaReg(), true);
 
     return trk_;}
 

@@ -38,9 +38,9 @@ Stub::Stub(const TTStubRef& ttStubRef, unsigned int index_in_vStubs, const Setti
   digitizedForHTinput_(false), // notes that stub has not yet been digitized for HT input.
   digitizedForSForTFinput_(""), // notes that stub has not yet been digitized for seed filter or track fitter input.
   digitizeWarningsOn_(true),
-  stubWindowSuggest_(settings, trackerTopology), // TMTT recommendations for stub window sizes to CMS.
-  degradeBend_(trackerTopology) // Used to degrade stub bend information.
-{
+stubWindowSuggest_(settings, trackerTopology), // TMTT recommendations for stub window sizes to CMS.
+  degradeBend_(trackerTopology){ // Used to degrade stub bend information.
+
   // Determine tracker geometry version (T3, T4, T5 ...)
   this->setTrackerGeometryVersion(trackerGeometry, trackerTopology);
 

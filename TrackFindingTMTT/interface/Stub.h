@@ -70,7 +70,7 @@ namespace TMTT {
     sigmaPerp_=stripPitch_/std::sqrt(12.0);
    };
   */ 
-Stub(double phi, double r, double z, double bend, int layerid, bool psModule, bool barrel, unsigned int iphi, double alpha, const Settings* settings, const TrackerTopology* trackerTopology) : digitalStub_(settings), stubWindowSuggest_(settings, trackerTopology), degradeBend_(trackerTopology) { //work in progress on better constructor for new hybrid
+Stub(double phi, double r, double z, double bend, int layerid, bool psModule, bool barrel, unsigned int iphi, double alpha, const Settings* settings, const TrackerTopology* trackerTopology) : digitalStub_(settings), stubWindowSuggest_(settings) { //work in progress on better constructor for new hybrid
     phi_=phi;
     r_=r;
     z_=z;

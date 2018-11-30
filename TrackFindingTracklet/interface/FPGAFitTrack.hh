@@ -291,12 +291,11 @@ class FPGAFitTrack:public FPGAProcessBase{
 	iSetup.get<TrackerDigiGeometryRecord>().get( trackerGeometryHandle );
 
 	const TrackerGeometry*  trackerGeometry = trackerGeometryHandle.product();
-
-	edm::ESHandle<TrackerTopology> trackerTopologyHandle;
-	iSetup.get<TrackerTopologyRcd>().get(trackerTopologyHandle);
-
+*/
+/*	edm::ESHandle<TrackerTopology> trackerTopologyHandle;
+	iSetup.get<TrackerTopologyRcd>().get(trackerTopologyHandle);/
 	const TrackerTopology*  trackerTopology = trackerTopologyHandle.product();
-	*/
+*/	
 
 
      if (printDebugKF) cout <<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;

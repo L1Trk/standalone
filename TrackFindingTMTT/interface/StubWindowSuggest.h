@@ -33,6 +33,7 @@ public:
   StubWindowSuggest(const Settings* settings, const TrackerTopology*  trackerTopo) :
     settings_(settings), ptMin_(settings->houghMinPt()), theTrackerTopo_(trackerTopo) {} 
 
+  StubWindowSuggest(const Settings* settings) : settings_(settings), ptMin_(settings->houghMinPt()) {}
   ~StubWindowSuggest() {}
 
   // Analyse stub window required for this stub.
