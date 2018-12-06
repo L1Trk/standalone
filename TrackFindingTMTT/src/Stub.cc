@@ -653,6 +653,8 @@ void Stub::setModuleInfo(const TrackerGeometry* trackerGeometry, const TrackerTo
   stripLength_ = pitch.second;  //  Strip length (or pixel pitch along longest axis)
   nStrips_ = topo.nrows(); // No. of strips in sensor
   sensorWidth_ = bounds.width(); // Width of sensitive region of sensor (= stripPitch * nStrips).
+std::cout << "nStrips "<< nStrips_ << std::endl;
+std::cout << "sensorWidth_ "<< sensorWidth_ << std::endl;
 
   // Note if modules are flipped back-to-front.
   outerModuleAtSmallerR_ = ( det0->position().mag() > det1->position().mag() );
@@ -661,6 +663,8 @@ void Stub::setModuleInfo(const TrackerGeometry* trackerGeometry, const TrackerTo
     outerModuleAtSmallerR_ = true;
   }
   */
+std::cout << "stripPitch "<< stripPitch_ << std::endl;
+std::cout << "stripLength "<< stripLength_ << std::endl;
 
   sigmaPerp_ = stripPitch_/sqrt(12.); // resolution perpendicular to strip (or to longest pixel axis)
   sigmaPar_  = stripLength_/sqrt(12.); // resolution parallel to strip (or to longest pixel axis)

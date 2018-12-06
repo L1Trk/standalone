@@ -53,7 +53,16 @@ namespace TMTT {
     kalmanFillInternalHists_=false;
     kalmanMultiScattTerm_=0.00075;
     kalmanMultiScattFactor_=0.0;
+
     hybrid_=true;
+    PSStripPitch_=0.01;
+    PSNStrips_=960;
+    PSPixelLength_=0.1467;
+    SSStripPitch_=0.009;
+    SSNStrips_=1016;
+    SSStripLength_=5.0250;
+    bField_=3.8112;
+
    }
    //=== General settings.
 
@@ -433,8 +442,15 @@ namespace TMTT {
    // N.B. This must bet set for each event, and can't be initialized at the beginning of the job.
    void                 setBfield(float bField)           {bField_ = bField;}
    float                getBfield()               const   {if (bField_ == 0.) throw cms::Exception("Settings.h:You attempted to access the B field before it was initialized"); return bField_;}
-//hybrid
-bool hybrid() const {return hybrid_;}
+   //hybrid
+   bool hybrid() const {return hybrid_;}
+   double  SSStripPitch() const {return SSStripPitch_;}
+   double  SSNStrips() const {return SSNStrips_;}
+   double  SSStripLength() const {return SSStripLength_;}
+
+   double  PSStripPitch() const {return PSStripPitch_;}
+   double  PSNStrips() const {return PSNStrips_;}
+   double  PSPixelLength() const {return PSPixelLength_;}
 
   private:
 
@@ -683,8 +699,16 @@ bool hybrid() const {return hybrid_;}
 
    // B-field in Tesla
    float                bField_;
-//hybrid   
-bool                hybrid_;
+   //hybrid   
+   bool                hybrid_;
+
+   double  PSStripPitch_;
+   double  PSNStrips_;
+   double  PSPixelLength_;
+   double  SSStripPitch_;
+   double  SSNStrips_;
+   double  SSStripLength_;
+
  };
 
 }

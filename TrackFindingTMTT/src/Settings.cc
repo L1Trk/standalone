@@ -264,7 +264,13 @@ namespace TMTT {
   bField_                 (0.),
 
    //hybrid  
-   hybrid_               ( iConfig.getParameter<bool>                ( "hybrid"               ) )
+   hybrid_               ( iConfig.getParameter<bool>                ( "hybrid"               ) ),
+    PSStripPitch_(0),
+    PSNStrips_(0),
+    PSPixelLength_(0),
+    SSStripPitch_(0),
+    SSNStrips_(0),
+    SSStripLength_(0)
    {
     // If user didn't specify any PDG codes, use e,mu,pi,K,p, to avoid picking up unstable particles like Xi-.
     vector<unsigned int> genPdgIdsUnsigned( genCuts_.getParameter<vector<unsigned int> >   ( "GenPdgIds" ) ); 
