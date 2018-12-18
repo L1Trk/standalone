@@ -81,9 +81,9 @@ Stub(double phi, double r, double z, double bend, int layerid, bool psModule, bo
     iphi_=iphi;
     alpha_=alpha;
     if(psModule && barrel){tiltedBarrel_=true;}
-    if(!psModule){stripPitch_=0.0089; nStrips_=1016;sigmaPar_=5/std::sqrt(12.0);
+    if(!psModule){stripPitch_=settings->SSStripPitch(); nStrips_=settings->SSNStrips();sigmaPar_=settings->SSStripLength()/std::sqrt(12.0);
     }else{
-     stripPitch_=0.099;nStrips_=960;sigmaPar_=0.15/std::sqrt(12.0);
+     stripPitch_=settings->PSStripPitch();nStrips_=settings->PSNStrips();sigmaPar_=settings->PSPixelLength()/std::sqrt(12.0);
     }
     sigmaPerp_=stripPitch_/std::sqrt(12.0);
    };

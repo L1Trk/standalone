@@ -495,9 +495,7 @@ L1fittedTrack L1KalmanComb::fit(const L1track3D& l1track3D){
 	printStubs( cout, stubs );
       }
     }
-std::cout << "debug 7" << std::endl;
     L1fittedTrack returnTrk(getSettings(), l1track3D, l1track3D.getStubs(), l1track3D.qOverPt(), 0, l1track3D.phi0(), l1track3D.z0(), l1track3D.tanLambda(), 9999, nPar_, false);
-std::cout << "debug 8" << std::endl;
     returnTrk.setInfoKF( 0, numUpdateCalls_ );
     return returnTrk;
   }
@@ -572,6 +570,8 @@ std::vector<const kalmanState *> L1KalmanComb::doKF( const L1track3D& l1track3D,
   bool remove2PSCut = getSettings()->kalmanRemove2PScut();
   set<unsigned> kalmanDeadLayers = getKalmanDeadLayers( layerMap, remove2PSCut );
 
+unsigned int stubCounter = 0;
+
   for( auto stubCluster : stubClusters ){
 		
     int kalmanLayer = layerMap[etaReg][stubCluster->layerIdReduced()];
@@ -596,8 +596,14 @@ std::vector<const kalmanState *> L1KalmanComb::doKF( const L1track3D& l1track3D,
       }
 			
     }
+/*
+if(getSettings()->hybrid()){
+kalmanLayer = stubCounter;
+stubCounter++;
+}*/
 		
-    layerStubs[kalmanLayer].push_back( stubCluster );
+ 
+   layerStubs[kalmanLayer].push_back( stubCluster );
 
   }
 

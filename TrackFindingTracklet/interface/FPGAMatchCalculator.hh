@@ -71,7 +71,7 @@ public:
 
     //to adjust globaly the phi and rz matching cuts
     phifact_=1.0;
-    if (doKF) phifact_=2.0;
+    if (doKF) phifact_=1.0;
     rzfact_=1.0;
 
     for(unsigned int seedindex=0;seedindex<7;seedindex++){

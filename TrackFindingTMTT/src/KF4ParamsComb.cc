@@ -146,10 +146,10 @@ TMatrixD KF4ParamsComb::seedP(const L1track3D& l1track3D)const{
   double c = getSettings()->invPtToInvR() / 2; 
 if(getSettings()->hybrid()){
 
-    p(INV2R,INV2R) = 100000*0.0157 * 0.0157 * c * c * 10; 
-    p(PHI0,PHI0) = 0.0051 * 0.0051 * 4; 
-    p(Z0,Z0) = 5.0 * 5.0; 
-    p(T,T) = 0.25 * 0.25 * 4;
+    p(INV2R,INV2R) = 10*0.0157 * 0.0157 * c * c * 4; 
+    p(PHI0,PHI0) = 10*0.0051 * 0.0051 * 4; 
+    p(Z0,Z0) = 10*5.0 * 5.0; 
+    p(T,T) = 10*0.25 * 0.25 * 4;
 
 }else{
 
@@ -402,7 +402,7 @@ bool KF4ParamsComb::isGoodState( const kalmanState &state )const
     if (tpa_ != nullptr) cout<<" pt(mc)="<<tpa_->pt();
     cout<<" tanL="<<state.xa()[T]<<" z0="<<z0<<" phi0="<<state.xa()[PHI0]<<endl;
   }
-
+goodState=true;
   return goodState;
 }
 

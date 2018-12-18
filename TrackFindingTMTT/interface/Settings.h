@@ -29,13 +29,13 @@ namespace TMTT {
     minPtToReduceLayers_=99999.;
     deadReduceLayers_=false;
     kalmanMinNumStubs_=4;
-    kalmanMaxNumStubs_=4;
+    kalmanMaxNumStubs_=6;
     numPhiOctants_=9;
     numPhiSectors_=9;
     kalmanRemove2PScut_=true;
     killScenario_=0;
     kalmanMaxSkipLayers_=6;
-    kalmanDebugLevel_=1;
+    kalmanDebugLevel_=2;
     enableDigitize_=false;
     houghMinPt_=2.0;
     chosenRofPhi_=55.0;
@@ -44,7 +44,7 @@ namespace TMTT {
     useApproxB_=true;
     kalmanHOtilted_=true; 
     kalmanHOhelixExp_=true;
-    kalmanHOalpha_=1;
+    kalmanHOalpha_=0;
     kalmanHOdodgy_=false;
     kalmanHOprojZcorr_=1;
     bApprox_gradient_=0.886454;

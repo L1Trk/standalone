@@ -173,7 +173,6 @@ class FPGAFitTrack:public FPGAProcessBase{
     std::vector<const TMTT::Stub*> stubs;
 
     TMTT::Settings* settings=new TMTT::Settings();
-    settings->setBfield(3.8);
     
     if (printDebugKF) cout << "Will make stub" << endl;
 
@@ -324,7 +323,7 @@ class FPGAFitTrack:public FPGAProcessBase{
     if (kfphi0<-M_PI) kfphi0+=2*M_PI;
 
     std::pair<unsigned int, unsigned int> celllocation(1,1);
-    std::pair<float,float> helixrphi(0.5*kfrinv,kfphi0);
+    std::pair<float,float> helixrphi(300*kfrinv/settings->getBfield(),kfphi0);
     std::pair<float,float> helixrz(kfz0,kft);
 
     //  TMTT phi sector definition: phiCentre_ = 2.*M_PI * (0.5 + float(iPhiSec)) / float(settings->numPhiSectors()) - M_PI; // Centre of sector in phi
@@ -378,14 +377,13 @@ TMTT::KFTrackletTrack trk = fittedTrk.returnKFTrackletTrack();
 
     if (printDebugKF) cout << "Done with Kalman fit. Pars: pt = " << trk.pt() << ", 1/2R = " << 3.8*3*trk.qOverPt()/2000 << ", phi0 = " << trk.phi0() << ", eta = " << trk.eta() << ", z0 = " << trk.z0() << endl;
 
-    double rinvfit=0.01*0.3*3.8*trk.qOverPt();
-
 
     double tracklet_phi0=M_PI+trk.phi0()-iSector_*2*M_PI/NSector+0.5*dphisectorHG;
 
     if (tracklet_phi0>M_PI) tracklet_phi0-=2*M_PI;
     if (tracklet_phi0<-M_PI) tracklet_phi0+=2*M_PI;
 
+    double rinvfit=0.01*0.3*settings->getBfield()*trk.qOverPt();
 
     if(trk.accepted()){
      tracklet->setFitPars(rinvfit,tracklet_phi0,sinh(trk.eta()),trk.z0(),
