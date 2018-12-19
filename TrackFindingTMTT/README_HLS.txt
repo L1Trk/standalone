@@ -17,7 +17,7 @@ You should then:
     TMTrackProducer.TrackFitSettings.TrackFitters = cms.vstring("KF4ParamsCombHLS")
 
 
-Notes:
+NOTES:
 
 a) The HLS code is in src/HLS/ & interface/HLS/
 
