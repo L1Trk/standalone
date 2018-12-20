@@ -4,8 +4,10 @@
 //Uncomment if you want root output
 //#define USEROOT
 
-//Uncomment if you want do not want to run the hybrid algorithm
-//#define USEHYBRID
+//Uncomment to run the hybrid algorithm
+#define USEHYBRID
+
+static unsigned int nHelixPar = 4; // 4 or 5 param helix fit.
 
 static bool doKF=true; //true if using KF (and USEHYBRID uncommented)
 static bool printDebugKF=false; // if true print lots of debugging statements related to the KF fit

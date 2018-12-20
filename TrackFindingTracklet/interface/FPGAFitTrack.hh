@@ -11,7 +11,10 @@
 #include "SimTracker/TrackTriggerAssociation/interface/TTClusterAssociationMap.h"
 #ifdef USEHYBRID
 #include "L1Trigger/TrackFindingTMTT/interface/L1track3D.h"
-#include "L1Trigger/TrackFindingTMTT/interface/KF4ParamsComb.h"
+#include "L1Trigger/TrackFindingTMTT/interface/KFParamsComb.h"
+#ifdef USE_HLS
+#include "L1Trigger/TrackFindingTMTT/interface/HLS/KFParamsCombCallHLS.h"
+#endif
 #include "L1Trigger/TrackFindingTMTT/interface/Settings.h"
 #include "L1Trigger/TrackFindingTMTT/interface/L1fittedTrack.h"
 #include "L1Trigger/TrackFindingTMTT/interface/KFTrackletTrack.h"
@@ -173,7 +176,7 @@ class FPGAFitTrack:public FPGAProcessBase{
     std::vector<const TMTT::Stub*> stubs;
 
     TMTT::Settings* settings=new TMTT::Settings();
-    
+
     if (printDebugKF) cout << "Will make stub" << endl;
 
     double kfphi=tracklet->innerStub()->phi();
@@ -316,8 +319,9 @@ class FPGAFitTrack:public FPGAProcessBase{
      std::cout << "dphisectorHG = " << dphisectorHG << std::endl;
     }
 
-    kfphi0 = kfphi0 + iSector_*2*M_PI/NSector - 0.5*dphisectorHG - M_PI;
-
+    // IRT bug fix
+    //kfphi0 = kfphi0 + iSector_*2*M_PI/NSector - 0.5*dphisectorHG - M_PI;
+    kfphi0 = kfphi0 + iSector_*2*M_PI/NSector - 0.5*dphisectorHG;
 
     if (kfphi0>M_PI) kfphi0-=2*M_PI;
     if (kfphi0<-M_PI) kfphi0+=2*M_PI;
@@ -362,23 +366,32 @@ class FPGAFitTrack:public FPGAProcessBase{
 
     TMTT::L1track3D l1track3d(settings,stubs,celllocation,helixrphi,helixrz,kf_phi_sec,kf_eta_reg,1,false);
 
-    //cout << "Will make KF4ParmsComb" << endl;
-
-    //second argument is nPar = 4 param fit, 5 param fit
-    TMTT::KF4ParamsComb KFitter(settings,4,"KFfitter");
+    //second argument is nHelixPar = 4 or 5 param fit
+    TMTT::TrackFitGeneric* fitterKF; // Wastes CPU to create this every event. Fix ...
+    static bool firstPrint = true;
+#ifdef USE_HLS
+    if (firstPrint) cout << "Will make KFParamsCombHLS for " << nHelixPar << "param fit" << endl;
+    fitterKF = new TMTT::KFParamsCombCallHLS(settings, nHelixPar, "KFfitterHLS");
+#else
+    if (firstPrint) cout << "Will make KFParamsComb for " << nHelixPar << "param fit"<< endl;
+    fitterKF = new TMTT::KFParamsComb(settings, nHelixPar, "KFfitter");
+#endif
+    firstPrint = false;
 
     //  cout << "Will call fit" << endl;
-    //KFitter.fit(l1track3d,1,kf_eta_reg);
+    //fitterKF->fit(l1track3d,1,kf_eta_reg);
 
-TMTT::L1fittedTrack fittedTrk = KFitter.fit(l1track3d); 
+    TMTT::L1fittedTrack fittedTrk = fitterKF->fit(l1track3d); 
+
+    delete fitterKF;
    
-TMTT::KFTrackletTrack trk = fittedTrk.returnKFTrackletTrack();
+    TMTT::KFTrackletTrack trk = fittedTrk.returnKFTrackletTrack();
 
+    if (printDebugKF) cout << "Done with Kalman fit. Pars: pt = " << trk.pt() << ", 1/2R = " << 3.8*3*trk.qOverPt()/2000 << ", phi0 = " << trk.phi0() << ", eta = " << trk.eta() << ", z0 = " << trk.z0() << ", chi2 = "<<trk.chi2()  << ", accepted = "<< trk.accepted() << endl;
 
-    if (printDebugKF) cout << "Done with Kalman fit. Pars: pt = " << trk.pt() << ", 1/2R = " << 3.8*3*trk.qOverPt()/2000 << ", phi0 = " << trk.phi0() << ", eta = " << trk.eta() << ", z0 = " << trk.z0() << endl;
-
-
-    double tracklet_phi0=M_PI+trk.phi0()-iSector_*2*M_PI/NSector+0.5*dphisectorHG;
+    // IRT bug fix
+    //double tracklet_phi0=M_PI+trk.phi0()-iSector_*2*M_PI/NSector+0.5*dphisectorHG;
+    double tracklet_phi0=trk.phi0()-iSector_*2*M_PI/NSector+0.5*dphisectorHG;
 
     if (tracklet_phi0>M_PI) tracklet_phi0-=2*M_PI;
     if (tracklet_phi0<-M_PI) tracklet_phi0+=2*M_PI;
