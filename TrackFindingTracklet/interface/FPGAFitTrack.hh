@@ -175,7 +175,7 @@ class FPGAFitTrack:public FPGAProcessBase{
 
     std::vector<const TMTT::Stub*> stubs;
 
-    TMTT::Settings* settings=new TMTT::Settings();
+    static TMTT::Settings* settings = new TMTT::Settings();
 
     if (printDebugKF) cout << "Will make stub" << endl;
 
@@ -366,15 +366,14 @@ class FPGAFitTrack:public FPGAProcessBase{
 
     TMTT::L1track3D l1track3d(settings,stubs,celllocation,helixrphi,helixrz,kf_phi_sec,kf_eta_reg,1,false);
 
-    //second argument is nHelixPar = 4 or 5 param fit
-    TMTT::TrackFitGeneric* fitterKF; // Wastes CPU to create this every event. Fix ...
+    // Create Kalman track fitter.
     static bool firstPrint = true;
 #ifdef USE_HLS
     if (firstPrint) cout << "Will make KFParamsCombHLS for " << nHelixPar << "param fit" << endl;
-    fitterKF = new TMTT::KFParamsCombCallHLS(settings, nHelixPar, "KFfitterHLS");
+    static TMTT::TrackFitGeneric* fitterKF = new TMTT::KFParamsCombCallHLS(settings, nHelixPar, "KFfitterHLS");
 #else
     if (firstPrint) cout << "Will make KFParamsComb for " << nHelixPar << "param fit"<< endl;
-    fitterKF = new TMTT::KFParamsComb(settings, nHelixPar, "KFfitter");
+    static TMTT::TrackFitGeneric* fitterKF = new TMTT::KFParamsComb(settings, nHelixPar, "KFfitter");
 #endif
     firstPrint = false;
 
@@ -382,8 +381,6 @@ class FPGAFitTrack:public FPGAProcessBase{
     //fitterKF->fit(l1track3d,1,kf_eta_reg);
 
     TMTT::L1fittedTrack fittedTrk = fitterKF->fit(l1track3d); 
-
-    delete fitterKF;
    
     TMTT::KFTrackletTrack trk = fittedTrk.returnKFTrackletTrack();
 
