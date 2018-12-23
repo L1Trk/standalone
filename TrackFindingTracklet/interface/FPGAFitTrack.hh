@@ -327,7 +327,8 @@ class FPGAFitTrack:public FPGAProcessBase{
     if (kfphi0<-M_PI) kfphi0+=2*M_PI;
 
     std::pair<unsigned int, unsigned int> celllocation(1,1);
-    std::pair<float,float> helixrphi(300*kfrinv/settings->getBfield(),kfphi0);
+    //    std::pair<float,float> helixrphi(300*kfrinv/settings->getBfield(),kfphi0);
+    std::pair<float,float> helixrphi(kfrinv*1.0e11/(2.9979e8*settings->getBfield()),kfphi0);
     std::pair<float,float> helixrz(kfz0,kft);
 
     //  TMTT phi sector definition: phiCentre_ = 2.*M_PI * (0.5 + float(iPhiSec)) / float(settings->numPhiSectors()) - M_PI; // Centre of sector in phi
