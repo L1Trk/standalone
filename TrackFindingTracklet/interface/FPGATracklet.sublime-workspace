@@ -1,0 +1,377 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"pt",
+				"pt_Z"
+			],
+			[
+				"p",
+				"pmu"
+			],
+			[
+				"file",
+				"filenum"
+			],
+			[
+				"in",
+				"inFile"
+			],
+			[
+				"m",
+				"mlv"
+			],
+			[
+				"event",
+				"event_wgt"
+			],
+			[
+				"ratio",
+				"ratio_hist"
+			],
+			[
+				"eve",
+				"event_wgt"
+			],
+			[
+				"genp_",
+				"genp_pdgid"
+			],
+			[
+				"ev",
+				"evt_pass_rewgt"
+			],
+			[
+				"evt",
+				"event_wgt"
+			],
+			[
+				"r",
+				"rwt_cts"
+			],
+			[
+				"total_wgt_",
+				"total_wgt_ct05"
+			],
+			[
+				"tot",
+				"total_wgt"
+			],
+			[
+				"events_pass",
+				"events_pass_ctau10_rewgt2"
+			],
+			[
+				"events_pass_cta",
+				"events_pass_ctau10_rewgt2"
+			],
+			[
+				"mp",
+				"mp_dht_25_y"
+			],
+			[
+				"Set",
+				"SetLineColor"
+			],
+			[
+				"events",
+				"events_pass_ctau05_rewgt"
+			],
+			[
+				"mp_",
+				"mp_dht_25_x"
+			],
+			[
+				"bin",
+				"bin_25"
+			],
+			[
+				"gra",
+				"graphs_ct05_r2"
+			],
+			[
+				"events_pass_rewgt",
+				"events_pass_ctau05_rewgt"
+			],
+			[
+				"eve_wgt_",
+				"eve_wgt_ct05"
+			],
+			[
+				"eve_wgt_ct",
+				"eve_wgt_ct75"
+			],
+			[
+				"events_pass_r",
+				"events_pass_reweight"
+			],
+			[
+				"gen",
+				"genp_ctau"
+			],
+			[
+				"ctau",
+				"ctau_hist"
+			],
+			[
+				"ht",
+				"ht_gen"
+			],
+			[
+				"Htgen",
+				"HTgenr_hist"
+			],
+			[
+				"ge",
+				"gen_vs_2cl"
+			],
+			[
+				"hm",
+				"hm_hist"
+			],
+			[
+				"Se",
+				"SetLineColor"
+			],
+			[
+				"HTg_Htt",
+				"HTg_HTtPass50_1"
+			],
+			[
+				"Htg",
+				"HTg_1"
+			],
+			[
+				"HT",
+				"HTg_HTPass100_1"
+			],
+			[
+				"HTg_HTt",
+				"HTg_HTtPass50_hist"
+			],
+			[
+				"Htg_HT",
+				"HTg_HTPass100_hist"
+			],
+			[
+				"ht_",
+				"ht_gen"
+			],
+			[
+				"tmp_trk",
+				"tmp_trk_nstub"
+			],
+			[
+				"trk",
+				"trk_nstub"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/gabhijith/hexcms/cms/threejet-2/abhijith/trijet_boost/zj_jec/submit.jcl",
+		"/Users/gabhijith/hexcms/cms/threejet-2/abhijith/trijet_boost/zj_jec/in8.txt",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/H125_1_submit.jcl",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/submit_H.sh",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2lfj2/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/atest.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2lfj2/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/L1TrackNtupleMaker.cc",
+		"/Users/gabhijith/hexcms/cms/threejet-2/abhijith/trijet_boost/zj_jec/submit.sh",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2lfj2/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/submit.sh",
+		"/Users/gabhijith/hexcms/cms/threejet-2/abhijith/trijet_boost/zj_jec/mu_ref.py",
+		"/Users/gabhijith/hexcms/cms/threejet-2/abhijith/trijet_boost/zj_jec/muon2.py",
+		"/Users/gabhijith/hexcms/cms/threejet-2/amit/muon2.py",
+		"/Users/gabhijith/hexcms/cms/threejet-2/duncan/CMSSW_9_4_6_patch1/src/threejet/SlimmedNtuplizer/plugins/SlimmedNtuplizer.cc",
+		"/Users/gabhijith/lxp/afs/cern.ch/user/a/agandrak/tdr2/papers/EXO-17-030/trunk/EXO-17-030.bib",
+		"/Users/gabhijith/lxp/afs/cern.ch/user/a/agandrak/myDir/notes/AN-18-196/trunk/AN-18-196.tex",
+		"/Users/gabhijith/work/root_dat/jetout_rishi.py",
+		"/Users/gabhijith/hexcms/cms/rish/CMSSW_10_1_7/src/L1Trigger/TrackFindingTracklet/test/L1TrackNtupleMaker.cc",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/jetout_rishi.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/jetout_new.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/L1TrackNtupleMaker.cc",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/atest.py",
+		"/Users/gabhijith/hexcms/cms/rish/HiddenHiggsSignal/jetout_new.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_10_1_7/src/L1Trigger/TrackletL1PVJets/test/L1TrackJetFastProducer.cc",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/CMSSW_10_1_7/src/L1Trigger/TrackFindingTracklet/test/L1TrackNtupleMaker.cc",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/CMSSW_10_1_7/src/L1Trigger/TrackFindingTracklet/test/atest.py",
+		"/Users/gabhijith/hexcms/cms/rish/CMSSW_10_1_7/src/L1Trigger/TrackletL1PVJets/test/L1TrackFastJets_cfg.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackFindingTracklet/test/genDecayChain_cfg.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackFindingTracklet/test/jetout_gen.py",
+		"/Users/gabhijith/hexcms/cms/rish/CMSSW_10_1_7/src/L1Trigger/TwoLayerJets/plugins/TwoLayerJets.cc",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_10_1_7/src/L1Trigger/TrackletL1PVJets/test/L1TrackFastJets_cfg.py",
+		"/Users/gabhijith/hexcms/cms/rish/CMSSW_10_1_7/src/L1Trigger/TrackletL1PVJets/test/L1TrackJetFastProducer.cc",
+		"/Users/gabhijith/hexcms/cms/rish/CMSSW_10_1_7/src/L1Trigger/TrackletL1PVJets/test/L1TrackJetFastProducer.c",
+		"/Users/gabhijith/lxp/afs/cern.ch/user/a/agandrak/myDir/papers/EXO-17-030/trunk/EXO-17-030.bib",
+		"/Users/gabhijith/lxp/afs/cern.ch/user/a/agandrak/myDir/papers/EXO-17-030/trunk/EXO-17-030.tex",
+		"/Users/gabhijith/Documents/EXO-17-030.tex",
+		"/Users/gabhijith/myDir/papers/EXO-17-030/trunk/EXO-17-030.tex",
+		"/Users/gabhijith/Documents/greg_comments.txt",
+		"/Users/gabhijith/Documents/louis_comments.txt",
+		"/Users/gabhijith/Documents/albert.txt",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackTrigger/test/SLHC_PU_Haan2_TkOnly_92x.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackFindingTracklet/test/jetout.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackTrigger/test/SLHC_200PU_Haan2_TkOnly_92x.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/jetout.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/jetout_tst.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/jetout_test.py",
+		"/Users/gabhijith/hexcms/cms/abhijith/hware2/2layer_fj/CMSSW_9_3_2/src/L1Trigger/TrackFindingTracklet/test/tracklet_em_disp.h"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "FPGATracklet.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

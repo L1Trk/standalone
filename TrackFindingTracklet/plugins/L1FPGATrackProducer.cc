@@ -272,6 +272,7 @@ L1FPGATrackProducer::L1FPGATrackProducer(edm::ParameterSet const& iConfig) :
   kphi0pars = FPGATrackletCalculator::ITC_L1L2.phi0_final.get_K();
   ktpars    = FPGATrackletCalculator::ITC_L1L2.t_final.get_K();
   kz0pars   = FPGATrackletCalculator::ITC_L1L2.z0_final.get_K();
+  kd0pars   = kd0;
 
   krdisk = kr;
   kzpars = kz;  
@@ -881,7 +882,7 @@ void L1FPGATrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 
     aTrack.setMomentum(p35par,5);
     aTrack.setRInv(track->rinv(),5);
-    double tmpchi25 = track->chisq()*(2*track->stubs().size()-4); // <= 5-parameter fit not yet implemented for emulation, so 4 is correct here
+    double tmpchi25 = track->chisq()*(2*track->stubs().size()-5); // <= 5-parameter fit not yet implemented for emulation, so 4 is correct here
     aTrack.setChi2(tmpchi25,5);
     
     
@@ -889,11 +890,11 @@ void L1FPGATrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
     
     vector<L1TStub> stubs;
 
-    if (doMyDebug) {
-      cout << "FPGA Track pt, eta, phi, z0, chi2, nstub, rinv = " 
-	   << track->pt() << " " << track->eta() << " " << track->phi0() << " " << track->z0() << " " << track->chisq() << " " << stubptrs.size() << " " << track->rinv() << endl;
-      cout << "INT FPGA Track irinv, iphi0, iz0, it, ichisq = " 
-	   << track->irinv() << " " << track->iphi0() << " " << track->iz0() << " " << track->it() << " " << track->ichisq() << endl;
+    if (1) {
+      cout << "FPGA Track pt, eta, phi, d0, z0, chi2, nstub, rinv = " 
+	   << track->pt() << " " << track->eta() << " " << track->phi0() << " " << track->d0()<<" "<<track->z0() << " " << track->chisq() << " " << stubptrs.size() << " " << track->rinv() << endl;
+      cout << "INT FPGA Track irinv, iphi0, id0, iz0, it, ichisq = " 
+	   << track->irinv() << " " << track->iphi0() << " " << track->id0()<<" "<<track->iz0() << " " << track->it() << " " << track->ichisq() << endl;
     }
 
     for (unsigned int i=0;i<stubptrs.size();i++){ 

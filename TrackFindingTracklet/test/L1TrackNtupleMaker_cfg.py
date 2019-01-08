@@ -44,18 +44,21 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:upgradePLS3', '')
 # input and output
 ############################################################
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 if GEOMETRY == "D17":
 
     # Read in 
-    list = FileUtils.loadListFromFile('../../TrackFindingTMTT/test/MCsamples/937/RelVal/TTbar/localRAL/PU200.txt')
+    #list = FileUtils.loadListFromFile('../../TrackFindingTMTT/test/MCsamples/937/RelVal/TTbar/localRAL/PU200.txt')
 
     #D17 (tilted barrel -- latest and greatest with T5 tracker, see: https://github.com/cms-sw/cmssw/blob/CMSSW_9_3_0_pre2/Configuration/Geometry/README.md)
     Source_Files = cms.untracked.vstring(
 #      *list
-      "/store/relval/CMSSW_9_3_7/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU25ns_93X_upgrade2023_realistic_v5_2023D17PU200-v1/10000/5A8CFF7F-1E2D-E811-A7B0-0242AC130002.root"
-    )
+#      "/store/relval/CMSSW_9_3_7/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU25ns_93X_upgrade2023_realistic_v5_2023D17PU200-v1/10000/5A8CFF7F-1E2D-E811-A7B0-0242AC130002.root"
+        # "file:/cms/abhijith/hware/CMSSW_9_2_0/src/L1Trigger/TrackTrigger/test/output/mH{0}_mh{1}_PU200/PU_Haa4_mH{0}_mh{1}_tau{2}_sample100_{3}_PU200_TkOnly.root".format(125,30,0,1)
+        # "file:/home/ahart/tracklet_events/DisplacedMuMinus.root"
+        "file:/cms/abhijith/hware/promt_mu/MuMinus_1to50_TkOnly.root"
+        )
 elif GEOMETRY == "TkOnly":
     Source_Files = cms.untracked.vstring(
     "file:/afs/cern.ch/work/s/skinnari/public/L1TK_90X/MuMinus_1to10_TkOnly.root"
@@ -128,7 +131,7 @@ process.L1TrackNtuple = cms.EDAnalyzer('L1TrackNtupleMaker',
                                        DebugMode = cms.bool(False),      # printout lots of debug statements
                                        SaveAllTracks = cms.bool(True),   # save *all* L1 tracks, not just truth matched to primary particle
                                        SaveStubs = cms.bool(False),      # save some info for *all* stubs
-                                       L1Tk_nPar = cms.int32(4),         # use 4 or 5-parameter L1 track fit ??
+                                       L1Tk_nPar = cms.int32(5),         # use 4 or 5-parameter L1 track fit ??
                                        L1Tk_minNStub = cms.int32(4),     # L1 tracks with >= 4 stubs
                                        TP_minNStub = cms.int32(4),       # require TP to have >= X number of stubs associated with it
                                        TP_minNStubLayer = cms.int32(4),  # require TP to have stubs in >= X layers/disks

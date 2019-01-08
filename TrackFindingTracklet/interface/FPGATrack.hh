@@ -21,6 +21,7 @@ public:
 
     irinv_=irinv;
     iphi0_=iphi0;
+    id0_=0.0;
     iz0_=iz0;
     it_=it;
     ichisq_=ichisq;
@@ -36,6 +37,28 @@ public:
 
   }
 
+  FPGATrack(int irinv, int iphi0, int id0, int it, int iz0, int ichisq,
+            double chisq,
+            std::map<int, int> stubID, std::vector<L1TStub*> l1stub,
+            int seed){
+
+    irinv_=irinv;
+    iphi0_=iphi0;
+    id0_=id0;
+    iz0_=iz0;
+    it_=it;
+    ichisq_=ichisq;
+
+    chisq_=chisq;
+
+    stubID_=stubID;
+    l1stub_=l1stub;
+
+    seed_=seed;
+    duplicate_=false;
+    sector_=NSector;
+
+  }
 
   ~FPGATrack() {
 
@@ -46,6 +69,7 @@ public:
 
   int irinv() const { return irinv_; }
   int iphi0() const { return iphi0_; }
+  int id0() const { return id0_; }
   int iz0()   const { return iz0_; }
   int it()    const { return it_; }
   int ichisq() const {return ichisq_;}
@@ -93,7 +117,7 @@ public:
   double rinv() const {
     return irinv_*krinvpars;
   }
-  double d0() const {return 0.0;} //Fix when fit for 5 pars
+  double d0() const {return id0_*kd0pars;} //Fix when fit for 5 pars
   double chisq() const {return chisq_;}
 
   int nPSstubs() const {
@@ -108,12 +132,14 @@ private:
   
   int irinv_;
   int iphi0_;
+  int id0_;  
   int iz0_;
   int it_;
   int ichisq_;
 
   double rinv_;
   double phi0_;
+  double d0_;
   double z0_;
   double t_;
   double chisq_;

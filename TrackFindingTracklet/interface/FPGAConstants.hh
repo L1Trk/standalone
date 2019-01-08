@@ -7,7 +7,7 @@
 //Uncomment to run the hybrid algorithm
 #define USEHYBRID
 
-static unsigned int nHelixPar = 4; // 4 or 5 param helix fit.
+static unsigned int nHelixPar = 5; // 4 or 5 param helix fit.
 
 static bool doKF=true; //true if using KF (and USEHYBRID uncommented)
 static bool printDebugKF=false; // if true print lots of debugging statements related to the KF fit
@@ -36,6 +36,9 @@ static bool writeInvTable=false;    //Write out tables of drinv and invt in trac
 static bool writeHLSInvTable=false; //Write out tables of drinv and invt in tracklet calculator for HLS module
 
 static bool writeFitDerTable=false; //Write out track derivative tables
+
+static int nbitsd0=13;
+static double kd0 = 2*10./(1<<nbitsd0);
 
 
 static bool writeDTCLinks=false;
@@ -380,7 +383,7 @@ const int PS_rderD_shift   = -6;  //Kderrdisk = 2^shift * Kr/Kz
 const int SS_rderD_shift   = -6;  
 
 //constants derivative from the above
-static double krinvpars, kphi0pars, ktpars, kz0pars;
+static double krinvpars, kphi0pars, kd0pars, ktpars, kz0pars;
 static double kphiproj123, kphiproj456, kzproj, kphider, kzder;
 static double krprojshiftdisk, kphiprojdisk,krprojderdisk;
 static double krdisk,krprojderdiskshift, kzpars;

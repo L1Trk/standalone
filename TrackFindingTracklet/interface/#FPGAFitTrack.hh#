@@ -1,4 +1,4 @@
-//This class implementes the track fit
+q//This class implementes the track fit
 #ifndef FPGAFITTRACK_H
 #define FPGAFITTRACK_H
 
@@ -396,15 +396,12 @@ class FPGAFitTrack:public FPGAProcessBase{
 
     double rinvfit=0.01*0.3*settings->getBfield()*trk.qOverPt();
 
-    int id0fit   = trk.d0()  / kd0;
-
     if(trk.accepted()){
-     tracklet->setFitPars(rinvfit,tracklet_phi0,trk.d0(),sinh(trk.eta()),trk.z0(),
-       trk.chi2(),rinvfit,tracklet_phi0, trk.d0(), sinh(trk.eta()),
+     tracklet->setFitPars(rinvfit,tracklet_phi0,sinh(trk.eta()),trk.z0(),
+       trk.chi2(),rinvfit,tracklet_phi0,sinh(trk.eta()),
        trk.z0(),trk.chi2(),rinvfit/krinvpars,
-       tracklet_phi0/kphi0pars,id0fit,
+       tracklet_phi0/kphi0pars,
        sinh(trk.eta())/ktpars,trk.z0()/kz0pars,trk.chi2());
-     //cout<<" KF fit d0 is "<<trk.d0()<<"\n";
     } else {
      if (printDebugKF) cout << "FPGAFitTrack:KF rejected track"<<endl;
     }
@@ -1335,7 +1332,7 @@ class FPGAFitTrack:public FPGAProcessBase{
 
     if(debug1) cout<<getName()<<" : nMatches = "<<nMatches<<" "<<asinh(bestTracklet->t())<<"\n";
 
-    if (nMatches>=1) { // aedit , should've been >=2
+    if (nMatches>=2) {
      countFit++;
      trackFitNew(bestTracklet);
      if (bestTracklet->fit()){
