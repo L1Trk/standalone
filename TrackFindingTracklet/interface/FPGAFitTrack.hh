@@ -174,6 +174,8 @@ class FPGAFitTrack:public FPGAProcessBase{
    if (doKF) {
 
     std::vector<const TMTT::Stub*> stubs;
+    std::map<unsigned int, L1TStub*> stubIndices;
+    unsigned int stubID = 0;
 
     static TMTT::Settings* settings = new TMTT::Settings();
 
@@ -197,8 +199,9 @@ class FPGAFitTrack:public FPGAProcessBase{
     }
 
     if (printDebugKF) cout << "Will create stub with : "<<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-    TMTT::Stub* stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule, barrel, iphi, alpha, settings, 0);
+    TMTT::Stub* stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule, barrel, iphi, alpha, settings, nullptr, stubID);
     stubs.push_back(stubptr);
+    stubIndices[stubID++] = tracklet->innerStub();
 
     kfphi=tracklet->outerStub()->phi();
     kfr=tracklet->outerStub()->r();
@@ -217,8 +220,9 @@ class FPGAFitTrack:public FPGAProcessBase{
 
 
     if (printDebugKF) cout << "Will create stub with : "<<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-    stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule ,barrel, iphi, alpha, settings, 0);
+    stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer, psmodule ,barrel, iphi, alpha, settings, nullptr, stubID);
     stubs.push_back(stubptr);
+    stubIndices[stubID++] = tracklet->outerStub();
 
     //
     // from full match lists, collect all the stubs associated with the tracklet seed
@@ -301,8 +305,9 @@ class FPGAFitTrack:public FPGAProcessBase{
 
 
      if (printDebugKF) cout <<kfphi<<" "<<kfr<<" "<<kfz<<" "<<kfbend<<" "<<kflayer<<" "<<barrel<<" "<<psmodule<<" "<<endl;
-     stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer,psmodule,barrel, iphi, alpha, settings, 0);
+     stubptr= new TMTT::Stub(kfphi,kfr,kfz,kfbend,kflayer,psmodule,barrel, iphi, alpha, settings, nullptr, stubID);
      stubs.push_back(stubptr);
+     stubIndices[stubID++] = l1stubptr;
     }
 
     if (printDebugKF) cout << "Made stubs: stublist.size() = " << stublist.size()<< endl;
@@ -370,10 +375,10 @@ class FPGAFitTrack:public FPGAProcessBase{
     // Create Kalman track fitter.
     static bool firstPrint = true;
 #ifdef USE_HLS
-    if (firstPrint) cout << "Will make KFParamsCombHLS for " << nHelixPar << "param fit" << endl;
+    if (firstPrint) cout << "Will make KFParamsCombHLS for " << nHelixPar << " param fit" << endl;
     static TMTT::TrackFitGeneric* fitterKF = new TMTT::KFParamsCombCallHLS(settings, nHelixPar, "KFfitterHLS");
 #else
-    if (firstPrint) cout << "Will make KFParamsComb for " << nHelixPar << "param fit"<< endl;
+    if (firstPrint) cout << "Will make KFParamsComb for " << nHelixPar << " param fit"<< endl;
     static TMTT::TrackFitGeneric* fitterKF = new TMTT::KFParamsComb(settings, nHelixPar, "KFfitter");
 #endif
     firstPrint = false;
@@ -397,11 +402,23 @@ class FPGAFitTrack:public FPGAProcessBase{
     double rinvfit=0.01*0.3*settings->getBfield()*trk.qOverPt();
 
     if(trk.accepted()){
-     tracklet->setFitPars(rinvfit,tracklet_phi0,sinh(trk.eta()),trk.z0(),
+
+      const vector<const TMTT::Stub*>& stubsFromFit = trk.getStubs();
+      vector<L1TStub*> l1stubsFromFit;
+      for (const TMTT::Stub* s : stubsFromFit) {
+	unsigned int IDf = s->index();
+	L1TStub* l1s = stubIndices.at(IDf);
+	l1stubsFromFit.push_back(l1s);
+      }
+
+      if (printDebugKF) cout<<"#stubs before/after KF fit = "<<stubs.size()<<"/"<<l1stubsFromFit.size()<<endl;
+
+      tracklet->setFitPars(rinvfit,tracklet_phi0,sinh(trk.eta()),trk.z0(),
        trk.chi2(),rinvfit,tracklet_phi0,sinh(trk.eta()),
        trk.z0(),trk.chi2(),rinvfit/krinvpars,
        tracklet_phi0/kphi0pars,
-       sinh(trk.eta())/ktpars,trk.z0()/kz0pars,trk.chi2());
+       sinh(trk.eta())/ktpars,trk.z0()/kz0pars,trk.chi2(),
+       l1stubsFromFit);
     } else {
      if (printDebugKF) cout << "FPGAFitTrack:KF rejected track"<<endl;
     }

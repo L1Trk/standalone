@@ -1276,7 +1276,8 @@ public:
 		  double rinvfitexact, double phi0fitexact, double tfitexact,
 		  double z0fitexact, double chisqfitexact,
 		  int irinvfit, int iphi0fit, int itfit,
-		  int iz0fit, int ichisqfit){
+		  int iz0fit, int ichisqfit,
+                  const vector<L1TStub*>& l1stubs = vector<L1TStub*>()){
 
     rinvfit_=rinvfit;
     phi0fit_=phi0fit;
@@ -1307,7 +1308,7 @@ public:
     iz0fit_.set(iz0fit,nbitsz0,false,__LINE__,__FILE__);
     ichisqfit_.set(ichisqfit,8,true,__LINE__,__FILE__);
 
-    fpgatrack_=new FPGATrack(makeTrack());
+    fpgatrack_=new FPGATrack(makeTrack(l1stubs));
 
   }
 
@@ -1479,16 +1480,22 @@ if (diskresid_[1].valid()) {
   }
 
 
-  FPGATrack makeTrack() {
+  FPGATrack makeTrack(vector<L1TStub*> l1stubs) {
     assert(fit());
+    
+    if (l1stubs.size() == 0) {
+      l1stubs = getL1Stubs(); // If fitter produced no stub list, take it from original tracklet.
+    };
+  
+
     FPGATrack tmpTrack(irinvfit_.value(),
                        iphi0fit_.value(),
                        itfit_.value(),
                        iz0fit_.value(),
                        ichisqfit_.value(),
                        chisqfit_,
-                       getStubIDs(),
-                       getL1Stubs(),
+                       getStubIDs(), // This needs fixing in case fitter updated stub list.
+                       l1stubs,
                        seed());
 
     return tmpTrack;
