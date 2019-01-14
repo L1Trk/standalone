@@ -441,7 +441,9 @@ bool KFParamsComb::isGoodState( const kalmanState &state )const
     if (goodState)     cout<<"State kept: nlay="<<nStubLayers; 
     cout<<" chi2="<<state.chi2()<<" pt="<<pt;
     if (tpa_ != nullptr) cout<<" pt(mc)="<<tpa_->pt();
-    cout<<" q/pt="<<qOverPt<<" tanL="<<y["t"]<<" z0="<<y["z0"]<<" phi0="<<y["phi0"]<<endl;
+    cout<<" q/pt="<<qOverPt<<" tanL="<<y["t"]<<" z0="<<y["z0"]<<" phi0="<<y["phi0"];
+    if (nPar_ == 5) cout<<" d0="<<y["D0"];
+    cout<<endl;
   }
 
   return goodState;
