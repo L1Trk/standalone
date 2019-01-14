@@ -7,6 +7,10 @@
 //Uncomment to run the hybrid algorithm
 #define USEHYBRID
 
+//Uncomment to run the HLS version of the KF if using the Hybrid (instead of the C++ KF).
+//(Please also follow the instructions in L1Trigger/TrackFindingTMTT/README_HLS.txt).
+//#define USE_HLS
+
 static unsigned int nHelixPar = 4; // 4 or 5 param helix fit.
 
 static bool doKF=true; //true if using KF (and USEHYBRID uncommented)
