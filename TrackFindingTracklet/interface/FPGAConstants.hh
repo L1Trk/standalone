@@ -41,6 +41,9 @@ static bool writeHLSInvTable=false; //Write out tables of drinv and invt in trac
 
 static bool writeFitDerTable=false; //Write out track derivative tables
 
+static int nbitsd0=13;
+static double kd0 = 2*10./(1<<nbitsd0);
+
 
 static bool writeDTCLinks=false;
 static bool writeIL=false;
@@ -384,7 +387,7 @@ const int PS_rderD_shift   = -6;  //Kderrdisk = 2^shift * Kr/Kz
 const int SS_rderD_shift   = -6;  
 
 //constants derivative from the above
-static double krinvpars, kphi0pars, ktpars, kz0pars;
+static double krinvpars, kphi0pars, kd0pars, ktpars, kz0pars;
 static double kphiproj123, kphiproj456, kzproj, kphider, kzder;
 static double krprojshiftdisk, kphiprojdisk,krprojderdisk;
 static double krdisk,krprojderdiskshift, kzpars;
