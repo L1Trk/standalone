@@ -21,6 +21,9 @@ class DigitalStub {
 
 public:
 
+  // A special constructor for HYBRID tracking.
+  DigitalStub(const Settings* settings,  float r, float phi, float z);
+
   // Note configuration parameters.
   DigitalStub(const Settings* settings);
 

@@ -29,7 +29,7 @@ StubKiller Stub::stubKiller_;
 
 Stub::Stub(double phi, double r, double z, double bend, int layerid, bool psModule, bool barrel, unsigned int iphi, double alpha, const Settings* settings, const TrackerTopology* trackerTopology, unsigned int ID) : 
   phi_(phi), r_(r), z_(z), bend_(bend), iphi_(iphi), alpha_(alpha), psModule_(psModule), layerId_(layerid), barrel_(barrel), 
-  digitalStub_(settings), stubWindowSuggest_(settings)
+  digitalStub_(settings, r, phi, z), stubWindowSuggest_(settings)
 { //work in progress on better constructor for new hybrid
   if (psModule && barrel) {
     double zMax[4];

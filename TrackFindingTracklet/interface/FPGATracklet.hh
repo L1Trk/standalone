@@ -1324,7 +1324,6 @@ public:
       double z0fitexact, double chisqfitexact,
       int irinvfit, int iphi0fit, int id0fit, int itfit,
       int iz0fit, int ichisqfit){
->>>>>>> abhijith
 
     rinvfit_=rinvfit;
     phi0fit_=phi0fit;

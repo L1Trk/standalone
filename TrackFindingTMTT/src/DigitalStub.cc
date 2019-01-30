@@ -5,6 +5,37 @@
 
 namespace TMTT {
 
+//=== A special constructor for HYBRID tracking
+
+DigitalStub::DigitalStub(const Settings* settings, float r, float phi, float z) {
+  /*
+// Implement stub coordinate digitisation for input to KF here.
+// NOT YET WRITTEN
+
+  ranMakeSForTFinput_ = "KF";
+  float rt = r - settings->chosenRofPhi();
+  float phiCentre = 2.*M_PI * (0.5 + float(iPhiSec)) / float(settings->numPhiSectors()) - M_PI;
+  float phiS = phi - phiCentre;
+  if (phiS >  M_PI) phiS -= 2*M_PI;
+  if (phiS < -M_PI) phiS += 2*M_PI;
+
+    //  TMTT phi sector definition: phiCentre_ = 2.*M_PI * (0.5 + float(iPhiSec)) / float(settings->numPhiSectors()) - M_PI; // Centre of sector in phi
+
+
+  // Phi coord. of stub relative to centre of octant.
+  double phiOctantCentre = phiOctantWidth_ * (0.5 + double(iPhiOct)) - M_PI;
+  phiO_orig_ = reco::deltaPhi(phi_orig_, phiOctantCentre);
+
+  //--- Digitize variables used exclusively in GP.
+  iDigi_Octant_ = iPhiOct;
+  iDigi_PhiO_   = floor(phiO_orig_*phiOMult_);
+  iDigi_Bend_   = round(bend_orig_*bendMult_);   // discrete values, so digitisation different 
+  //--- Digitize variables used in both GP & HT.
+  iDigi_Rt_     = floor(rt_orig_*rtMult_);
+  iDigi_Z_      = floor(z_orig_*zMult_);
+  */
+}
+
 //=== Note configuration parameters.
 
 DigitalStub::DigitalStub(const Settings* settings) :
