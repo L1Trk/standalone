@@ -1314,7 +1314,7 @@ public:
     iz0fit_.set(iz0fit,nbitsz0,false,__LINE__,__FILE__);
     ichisqfit_.set(ichisqfit,8,true,__LINE__,__FILE__);
 
-    fpgatrack_=new FPGATrack(makeTrack());
+    fpgatrack_=new FPGATrack(makeTrack(l1stubs));
 
   }
 
@@ -1357,7 +1357,7 @@ public:
     iz0fit_.set(iz0fit,nbitsz0,false,__LINE__,__FILE__);
     ichisqfit_.set(ichisqfit,8,true,__LINE__,__FILE__);
 
-    fpgatrack_=new FPGATrack(makeTrack(l1stubs));
+    fpgatrack_=new FPGATrack(makeTrack());
 
   }
 
