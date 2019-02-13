@@ -1317,7 +1317,7 @@ public:
     fpgatrack_=new FPGATrack(makeTrack(l1stubs));
 
   }
-
+/*
   void setFitPars(double rinvfit, double phi0fit, double d0fit, double tfit,
       double z0fit, double chisqfit,
       double rinvfitexact, double phi0fitexact, double d0fitexact, double tfitexact,
@@ -1360,7 +1360,7 @@ public:
     fpgatrack_=new FPGATrack(makeTrack());
 
   }
-
+*/
 
   std::string trackfitstr() {
     std::ostringstream oss;
